@@ -1,3 +1,4 @@
+/*
 package com.github.9llllepulla.asn1
 
 import com.intellij.DynamicBundle
@@ -19,3 +20,4 @@ object MyBundle : DynamicBundle(BUNDLE) {
     fun messagePointer(@PropertyKey(resourceBundle = BUNDLE) key: String, vararg params: Any) =
         getLazyMessage(key, *params)
 }
+*/

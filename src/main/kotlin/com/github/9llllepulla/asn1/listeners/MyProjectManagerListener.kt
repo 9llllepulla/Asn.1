@@ -1,3 +1,4 @@
+/*
 package com.github.9llllepulla.asn1.listeners
 
 import com.intellij.openapi.components.service
@@ -14,3 +15,4 @@ internal class MyProjectManagerListener : ProjectManagerListener {
             ?: TODO("Don't forget to remove all non-needed sample code files with their corresponding registration entries in `plugin.xml`.")
     }
 }
+*/

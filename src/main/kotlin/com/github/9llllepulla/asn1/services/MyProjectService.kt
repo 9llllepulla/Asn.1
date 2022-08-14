@@ -1,3 +1,4 @@
+/*
 package com.github.9llllepulla.asn1.services
 
 import com.intellij.openapi.project.Project
@@ -12,3 +13,4 @@ class MyProjectService(project: Project) {
             ?: TODO("Don't forget to remove all non-needed sample code files with their corresponding registration entries in `plugin.xml`.")
     }
 }
+*/

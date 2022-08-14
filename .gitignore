@@ -19,3 +19,5 @@ out/
 /src/main/java/com/gllllepulla/plugin/grammar/monkey.bnf
 
 /src/main/gen
+/src/main/kotlin
+
