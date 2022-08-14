@@ -37,7 +37,7 @@ public class AsnFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getName() {
-        return "ASN.1 File";
+        return "Asn.1 File";
     }
 
     @NotNull
@@ -55,6 +55,6 @@ public class AsnFileType extends LanguageFileType {
     @Nullable
     @Override
     public Icon getIcon() {
-        return IconLoader.getIcon("META-INF/asn.1.png", this.getClass());
+        return IconLoader.getIcon("META-INF/pluginIcon.svg", this.getClass());
     }
 }
