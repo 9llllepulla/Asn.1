@@ -17,17 +17,15 @@
 package com.gllllepulla.plugin;
 
 import com.intellij.lang.Language;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Register language
  */
 public class AsnLanguage extends Language {
 
-    public static final Language INSTANCE = new AsnLanguage("ASN.1");
+    public static final Language INSTANCE = new AsnLanguage();
 
-    private AsnLanguage(@NonNls @NotNull String ID) {
-        super(ID);
+    private AsnLanguage() {
+        super("Asn.1");
     }
 }

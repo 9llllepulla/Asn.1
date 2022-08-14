@@ -17,10 +17,7 @@
 package com.gllllepulla.plugin;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.util.NlsContexts;
-import com.intellij.openapi.util.NlsSafe;
-import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,33 +34,27 @@ public class AsnFileType extends LanguageFileType {
         super(AsnLanguage.INSTANCE);
     }
 
+    @NotNull
     @Override
-    public @NonNls @NotNull String getName() {
+    public String getName() {
         return "ASN.1 File";
     }
 
+    @NotNull
     @Override
-    public @NlsContexts.Label @NotNull String getDescription() {
+    public String getDescription() {
         return "ASN.1 - Abstract Syntax Notation One, a language for describing structured information";
     }
 
+    @NotNull
     @Override
-    public @NlsSafe @NotNull String getDefaultExtension() {
+    public String getDefaultExtension() {
         return "asn";
     }
 
+    @Nullable
     @Override
-    public @Nullable Icon getIcon() {
-        return null;
-    }
-
-    @Override
-    public boolean isReadOnly() {
-        return super.isReadOnly();
-    }
-
-    @Override
-    public @NonNls @Nullable String getCharset(@NotNull VirtualFile file, byte @NotNull [] content) {
-        return super.getCharset(file, content);
+    public Icon getIcon() {
+        return IconLoader.getIcon("META-INF/asn.1.png", this.getClass());
     }
 }

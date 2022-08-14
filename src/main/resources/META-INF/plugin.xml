@@ -1,18 +1,18 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.9llllepulla.asn1</id>
-    <name>asn.1</name>
-    <vendor>9llllepulla</vendor>
+    <name>Asn.1</name>
+    <vendor>email="9llllepulla@gmail.com" url="https://9llllerulla.com">9llllepulla.Inc</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.9llllepulla.asn1.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.9llllepulla.asn1.services.MyProjectService"/>
+        <fileType
+                name="Asn.1 File"
+                implementationClass="com.gllllepulla.plugin.AsnFileType"
+                fieldName="INSTANCE"
+                language="Asn.1"
+                extensions="asn"/>
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.9llllepulla.asn1.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
 </idea-plugin>
