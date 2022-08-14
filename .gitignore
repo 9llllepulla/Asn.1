@@ -14,3 +14,6 @@ exmpl/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+/src/main/java/com/gllllepulla/plugin/grammar/exmpl.bnf
+/src/main/java/com/gllllepulla/plugin/grammar/monkey.bnf
