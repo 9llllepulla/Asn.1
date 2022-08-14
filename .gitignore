@@ -17,3 +17,5 @@ out/
 
 /src/main/java/com/gllllepulla/plugin/grammar/exmpl.bnf
 /src/main/java/com/gllllepulla/plugin/grammar/monkey.bnf
+
+/src/main/gen
