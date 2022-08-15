@@ -29,6 +29,7 @@ import javax.swing.*;
 public class AsnFileType extends LanguageFileType {
 
     public static final LanguageFileType INSTANCE = new AsnFileType();
+    public static final Icon ICON_FILE = IconLoader.getIcon("META-INF/pluginIcon.svg", AsnFileType.class);
 
     private AsnFileType() {
         super(AsnLanguage.INSTANCE);
@@ -55,6 +56,6 @@ public class AsnFileType extends LanguageFileType {
     @Nullable
     @Override
     public Icon getIcon() {
-        return IconLoader.getIcon("META-INF/pluginIcon.svg", this.getClass());
+        return ICON_FILE;
     }
 }
