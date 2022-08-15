@@ -16,6 +16,10 @@
         <lang.parserDefinition
             language="Asn.1"
             implementationClass="com.gllllepulla.plugin.parser.AsnParserDefinition"/>
+        <lang.syntaxHighlighterFactory
+            language="Asn.1"
+            implementationClass="com.gllllepulla.plugin.highlighter.AsnSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="com.gllllepulla.plugin.highlighter.AsnColorSettingsPage"/>
     </extensions>
 
 </idea-plugin>
