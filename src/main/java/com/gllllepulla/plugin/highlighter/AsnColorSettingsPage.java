@@ -52,9 +52,7 @@ public class AsnColorSettingsPage implements ColorSettingsPage {
 
     @Override
     public @NonNls @NotNull String getDemoText() {
-        return """
-                TEXT
-                """;
+        return "TEXT";
     }
 
     @Nullable
