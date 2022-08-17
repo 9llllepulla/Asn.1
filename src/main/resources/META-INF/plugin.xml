@@ -5,6 +5,7 @@
     <vendor>email="9llllepulla@gmail.com" url="https://9llllerulla.com">9llllepulla.Inc</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType
