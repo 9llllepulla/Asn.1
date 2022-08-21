@@ -10,34 +10,38 @@ ASN.1 был стандартизирован на международном у
 
 1. Ключевые слова:
 
-- BEGIN
-- IMPLICIT
-- TAGGED
-- TAGS
-- CLASS
-- EXPORTS
-- IMPORTS
-- ENUMERATED
-- SEQUENCE
-- SEQUENCE OF
-- CHOICE
-- UNIQUE
-- WITH SYNTAX
-- OID
-- DATA
-- SIZE
-- FROM
-- END
+1)  BEGIN
+2)  IMPLICIT
+3)  TAGGED
+4)  TAGS
+5)  CLASS
+6)  EXPORTS
+7)  IMPORTS
+8)  ENUMERATED
+9)  SEQUENCE
+10) SEQUENCE OF
+11) CHOICE
+12) UNIQUE
+13) WITH SYNTAX
+14) DEFINITIONS
+15) OID
+16) DATA
+17) SIZE
+18) FROM
+19) END
 
 2. Размерности:
 
-- UTCTime
-- UTF8String
-- INTEGER
-- NULL
-- OPTIONAL
-- BOOLEAN
-- OCTET STRING
+1)  UTCTime
+2)  UTF8String
+3)  INTEGER
+4)  NULL
+5)  OPTIONAL
+6)  BOOLEAN
+7)  OCTET STRING
+8)  NumericString
+9)  DateAndTime
+10) IPAddress
 
 3. Служебные символы:
 
