@@ -29,14 +29,86 @@
   tokenTypeClass="com.gllllepulla.plugin.psi.AsnTokenType"
 
   tokens = [
-        /* key words */
+        /* keywords */
+        BEGIN = "BEGIN"
+        IMPLICIT = "IMPLICIT"
+        TAGGED = "TAGGED"
+        TAGS = "TAGS"
+        CLASS = "CLASS"
+        EXPORTS = "EXPORTS"
+        IMPORTS = "IMPORTS"
+        ENUMERATED = "ENUMERATED"
         SEQUENCE = "SEQUENCE"
-     ]
+        SEQUENCE_OF = "SEQUENCE OF"
+        CHOICE = "CHOICE"
+        UNIQUE = "UNIQUE"
+        DEFINITIONS = "DEFINITIONS"
+        OID = "OID"
+        DATA = "DATA"
+        SIZE = "SIZE"
+        FROM = "FROM"
+        WITH_SYNTAX = "WITH SYNTAX"
+        END = "END"
 
-     generateTokenAccessors=true
+        /* brackets */
+        LPAREN = "("
+        RPAREN = ")"
+        LBRACE = "{"
+        RBRACE = "}"
+        LBRACKET = "["
+        RBRACKET = "]"
+
+        /* Operators */
+        LET = "::="
+        COMMA = ","
+        SEMICOLON = ";"
+        COLON = ":"
+        DOT = "."
+
+        /* comments */
+        COMMENT_LINE = "regexp:---.*"
+
+        /* type keywords */
+        UTC_TIME = "UTCTime"
+        UTF8STRING = "UTF8String"
+        INTEGER = "INTEGER"
+        NULL = "NULL"
+        OPTIONAL = "OPTIONAL"
+        BOOLEAN = "BOOLEAN"
+        OCTET_STRING = "OCTET STRING"
+        NUMERIC_STRING = "NumericString"
+        DATE_AND_TIME = "DateAndTime"
+        IP_ADDRESS = "IPAddress"
+        DOUBLE_DOT = ".."
+
+        /* Numbers */
+        INT = "regexp:[0-9]+"
+
+        /* */
+        CRLF="regexp:\R"
+        WHITE_SPACE="regexp:[\n\t\f]"
+  ]
+
+  generateTokenAccessors=true
 }
-asnFile ::= item_*
-private item_ ::= (property|SEQUENCE|CRLF)
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+
+asnFile ::= !<<eof>> program
+program ::= element *
+private element ::= { pin=2 recoverWhile=property_recover }
+private property_recover ::= !(
+BEGIN | IMPLICIT | TAGGED | TAGS | CLASS | EXPORTS | IMPORTS | ENUMERATED | SEQUENCE | CHOICE | UNIQUE | DEFINITIONS |
+OID | DATA | SIZE | FROM | END | SEQUENCE_OF | WITH_SYNTAX |
+
+LPAREN | RPAREN | LBRACE | RBRACE | LBRACKET | RBRACKET |
+
+LET | COMMA | SEMICOLON | COLON | DOT |
+
+COMMENT |
+
+UTC_TIME | UTF8STRING | INTEGER | NULL | OPTIONAL | BOOLEAN | OCTET_STRING | NUMERIC_STRING | DATE_AND_TIME | IP_ADDRESS | DOUBLE_DOT
+
+INT)
+
+
 
 
