@@ -34,14 +34,16 @@ import static com.gllllepulla.plugin.parser.AsnParserDefinition.*;
 
 public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    private static final Map<TokenName, TextAttributesKey> OVERRIDDEN_HIGHLIGHTERS = Map.of(
-            TokenName.KEYWORDS, DefaultLanguageHighlighterColors.STATIC_METHOD,
-            TokenName.NUMBERS, DefaultLanguageHighlighterColors.CLASS_REFERENCE,
-            TokenName.BRACKETS, DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE,
-            TokenName.TYPE_KEYWORDS, DefaultLanguageHighlighterColors.STATIC_FIELD,
-            TokenName.OPERATORS, DefaultLanguageHighlighterColors.KEYWORD,
-            TokenName.COMMENTS, DefaultLanguageHighlighterColors.BLOCK_COMMENT,
-            TokenName.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER
+    private static final Map<TokenGroup, TextAttributesKey> OVERRIDDEN_HIGHLIGHTERS = Map.of(
+            TokenGroup.KEYWORDS, DefaultLanguageHighlighterColors.STATIC_METHOD,
+            TokenGroup.NUMBERS, DefaultLanguageHighlighterColors.CLASS_REFERENCE,
+            TokenGroup.BRACKETS, DefaultLanguageHighlighterColors.KEYWORD,
+            TokenGroup.TYPE_KEYWORDS, DefaultLanguageHighlighterColors.STATIC_FIELD,
+            TokenGroup.OPERATORS, DefaultLanguageHighlighterColors.KEYWORD,
+            TokenGroup.COMMENTS, DefaultLanguageHighlighterColors.BLOCK_COMMENT,
+            TokenGroup.VAR, DefaultLanguageHighlighterColors.STRING,
+            TokenGroup.REF, DefaultLanguageHighlighterColors.CLASS_REFERENCE,
+            TokenGroup.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER
     );
 
     private static Map<TokenSet, TextAttributesKey[]> asnDefinitions;
@@ -74,7 +76,7 @@ public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
                 .collect(toMap(
                         entry -> AsnParserDefinition.TOKEN_GROUPS.get(entry.getKey()),
                         entry -> {
-                            var textAttributesKey = createTextAttributesKey(entry.getKey().getTokenName(), entry.getValue());
+                            var textAttributesKey = createTextAttributesKey(entry.getKey().getGroupName(), entry.getValue());
                             return new TextAttributesKey[]{textAttributesKey};
                         }));
     }
