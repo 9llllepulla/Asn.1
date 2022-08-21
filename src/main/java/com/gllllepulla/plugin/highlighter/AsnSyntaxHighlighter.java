@@ -16,39 +16,41 @@
 package com.gllllepulla.plugin.highlighter;
 
 import com.gllllepulla.plugin.lexer.AsnLexerAdapter;
-import com.gllllepulla.plugin.psi.AsnTypes;
+import com.gllllepulla.plugin.parser.AsnParserDefinition;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
-import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
+import static java.util.stream.Collectors.toMap;
+import static com.gllllepulla.plugin.parser.AsnParserDefinition.*;
 
 public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    public static final TextAttributesKey SEPARATOR = createTextAttributesKey("SIMPLE_SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
-    public static final TextAttributesKey KEY = createTextAttributesKey("SIMPLE_KEY", DefaultLanguageHighlighterColors.CLASS_NAME);
-    public static final TextAttributesKey VALUE = createTextAttributesKey("SIMPLE_VALUE", DefaultLanguageHighlighterColors.STATIC_FIELD);
-    public static final TextAttributesKey COMMENT = createTextAttributesKey("SIMPLE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-    public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("SIMPLE_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
+    private static final Map<TokenName, TextAttributesKey> OVERRIDDEN_HIGHLIGHTERS = Map.of(
+            TokenName.KEYWORDS, DefaultLanguageHighlighterColors.STATIC_METHOD,
+            TokenName.NUMBERS, DefaultLanguageHighlighterColors.CLASS_REFERENCE,
+            TokenName.BRACKETS, DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE,
+            TokenName.TYPE_KEYWORDS, DefaultLanguageHighlighterColors.STATIC_FIELD,
+            TokenName.OPERATORS, DefaultLanguageHighlighterColors.KEYWORD,
+            TokenName.COMMENTS, DefaultLanguageHighlighterColors.BLOCK_COMMENT,
+            TokenName.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER
+    );
 
-    private static final Map<IElementType, TextAttributesKey[]> TYPES = new HashMap<>(){
-        {
-            put(AsnTypes.SEPARATOR, new TextAttributesKey[]{SEPARATOR});
-            put(AsnTypes.KEY, new TextAttributesKey[]{KEY});
-            put(AsnTypes.VALUE, new TextAttributesKey[]{VALUE});
-            put(AsnTypes.COMMENT, new TextAttributesKey[]{COMMENT});
-            put(TokenType.BAD_CHARACTER, new TextAttributesKey[]{BAD_CHARACTER});
+    private static Map<TokenSet, TextAttributesKey[]> asnDefinitions;
+
+    public AsnSyntaxHighlighter() {
+        if (asnDefinitions == null) {
+            asnDefinitions = createAsnDefinitions();
         }
-    };
+    }
 
     @NotNull
     @Override
@@ -58,8 +60,23 @@ public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
 
     @Override
     public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
-        return Optional.ofNullable(TYPES.get(tokenType))
+        return asnDefinitions.keySet()
+                .stream()
+                .filter(tokenSet -> tokenSet.contains(tokenType))
+                .findFirst()
+                .map(asnDefinitions::get)
                 .orElse(new TextAttributesKey[0]);
+    }
+
+    private Map<TokenSet, TextAttributesKey[]> createAsnDefinitions() {
+        return OVERRIDDEN_HIGHLIGHTERS.entrySet()
+                .stream()
+                .collect(toMap(
+                        entry -> AsnParserDefinition.TOKEN_GROUPS.get(entry.getKey()),
+                        entry -> {
+                            var textAttributesKey = createTextAttributesKey(entry.getKey().getTokenName(), entry.getValue());
+                            return new TextAttributesKey[]{textAttributesKey};
+                        }));
     }
 
 }
