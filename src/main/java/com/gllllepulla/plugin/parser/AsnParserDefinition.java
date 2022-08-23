@@ -35,27 +35,26 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 import static com.gllllepulla.plugin.psi.AsnTypes.*;
-import static com.intellij.openapi.vcs.changes.ignore.psi.IgnoreTypes.COMMENT;
 
 public class AsnParserDefinition implements ParserDefinition {
 
     public static final IFileElementType FILE = new IFileElementType(AsnLanguage.INSTANCE);
 
     private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    private static final TokenSet COMMENTS_TOKEN = TokenSet.create(COMMENT_LINE);
+    private static final TokenSet COMMENTS_TOKEN = TokenSet.create(COMMENT_LINE, COMMENT_HEADER);
 
-    public static final Map<TokenName, TokenSet> TOKEN_GROUPS = Map.of(
-            TokenName.NUMBERS, TokenSet.create(INT, DOUBLE_DOT, DOT),
-            TokenName.BRACKETS, TokenSet.create(LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET),
-            TokenName.KEYWORDS, TokenSet.create(BEGIN, IMPLICIT, TAGGED, TAGS, CLASS, EXPORTS, IMPORTS, ENUMERATED, SEQUENCE, CHOICE,
-                    UNIQUE, OID, DATA, SIZE, FROM, END, DEFINITIONS, WITH_SYNTAX, SEQUENCE_OF),
-
-            TokenName.TYPE_KEYWORDS, TokenSet.create(UTC_TIME, UTF8STRING, INTEGER, NULL, OPTIONAL, BOOLEAN, OCTET_STRING,
-                    DATE_AND_TIME, IP_ADDRESS, NUMERIC_STRING),
-
-            TokenName.OPERATORS, TokenSet.create(LET, COMMA, SEMICOLON, COLON),
-            TokenName.COMMENTS, COMMENTS_TOKEN,
-            TokenName.BAD_CHARACTER, TokenSet.create(TokenType.BAD_CHARACTER)
+    public static final Map<TokenGroup, TokenSet> TOKEN_GROUPS = Map.of(
+            TokenGroup.NUMBERS, TokenSet.create(INT, DOUBLE_DOT, DOT, MINUS),
+            TokenGroup.BRACKETS, TokenSet.create(LPAREN, RPAREN, LBRACKET, RBRACKET),
+            TokenGroup.KEYWORDS, TokenSet.create(BEGIN, IMPLICIT, TAGGED, TAGS, CLASS, EXPORTS, IMPORTS, ENUMERATED, SEQUENCE, CHOICE,
+                    UNIQUE, OID, DATA, SIZE, FROM, END, DEFINITIONS, WITH_SYNTAX, SEQUENCE_OF, LBRACE, RBRACE),
+            TokenGroup.TYPE_KEYWORDS, TokenSet.create(UTC_TIME, UTF8STRING, INTEGER, NULL, OPTIONAL, BOOLEAN, OCTET_STRING,
+                    DATE_AND_TIME, NUMERIC_STRING, RAW_BYTES, IP_ADDRESS, IP_MASK, IP_PORT),
+            TokenGroup.OPERATORS, TokenSet.create(LET, COMMA, SEMICOLON, COLON, ID, OR, AT, DOUBLE_QUOTE),
+            TokenGroup.COMMENTS, COMMENTS_TOKEN,
+            TokenGroup.VAR, TokenSet.create(VAR_ID),
+            TokenGroup.REF, TokenSet.create(REF_ID),
+            TokenGroup.BAD_CHARACTER, TokenSet.create(TokenType.BAD_CHARACTER)
     );
 
     @NotNull
@@ -110,23 +109,25 @@ public class AsnParserDefinition implements ParserDefinition {
         return AsnTypes.Factory.createElement(node);
     }
 
-    public enum TokenName {
+    public enum TokenGroup {
         NUMBERS("NUMBERS"),
         COMMENTS("COMMENTS"),
         BRACKETS("BRACKETS"),
         KEYWORDS("KEYWORDS"),
         TYPE_KEYWORDS("TYPE_KEYWORDS"),
         OPERATORS("OPERATORS"),
+        VAR("VAR"),
+        REF("REF"),
         BAD_CHARACTER("ASN_BAD_CHARACTER");
 
-        private final String tokenName;
+        private final String groupName;
 
-        TokenName(String tokenName) {
-            this.tokenName = tokenName;
+        TokenGroup(String groupName) {
+            this.groupName = groupName;
         }
 
-        public String getTokenName() {
-            return tokenName;
+        public String getGroupName() {
+            return groupName;
         }
     }
 }

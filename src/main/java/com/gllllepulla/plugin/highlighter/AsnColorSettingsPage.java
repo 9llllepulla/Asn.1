@@ -29,14 +29,15 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.Map;
 
+import static com.gllllepulla.plugin.highlighter.AsnSyntaxHighlighter.OVERRIDDEN_HIGHLIGHTERS;
+
 public class AsnColorSettingsPage implements ColorSettingsPage {
 
-    private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
-            new AttributesDescriptor("Key", AsnSyntaxHighlighter.KEY),
-            new AttributesDescriptor("Separator", AsnSyntaxHighlighter.SEPARATOR),
-            new AttributesDescriptor("Value", AsnSyntaxHighlighter.VALUE),
-            new AttributesDescriptor("Bad value", AsnSyntaxHighlighter.BAD_CHARACTER)
-    };
+    private static AttributesDescriptor[] descriptors;
+
+    public AsnColorSettingsPage() {
+        descriptors = createAttributesDescriptors();
+    }
 
     @Nullable
     @Override
@@ -52,7 +53,13 @@ public class AsnColorSettingsPage implements ColorSettingsPage {
 
     @Override
     public @NonNls @NotNull String getDemoText() {
-        return "TEXT";
+        return "TelcosRecord ::= SEQUENCE {\n" +
+                "  telco-id\t\tTelcoID,\t\t\t\t\t--- номер\n" +
+                "  begin-time\tDateAndTime,\t\t\t\t--- время начала\n" +
+                "  end-time\tDateAndTime OPTIONAL,\t\t\t--- время конца\n" +
+                "  description\tUTF8String (SIZE (1 .. 256)),\t\t--- описание\n" +
+                "  mcc [0]\t\tNumericString (SIZE(3)) OPTIONAL,\t--- код\n" +
+                "}";
     }
 
     @Nullable
@@ -63,7 +70,7 @@ public class AsnColorSettingsPage implements ColorSettingsPage {
 
     @Override
     public AttributesDescriptor @NotNull [] getAttributeDescriptors() {
-        return DESCRIPTORS;
+        return descriptors;
     }
 
     @Override
@@ -74,5 +81,12 @@ public class AsnColorSettingsPage implements ColorSettingsPage {
     @Override
     public @NotNull @NlsContexts.ConfigurableName String getDisplayName() {
         return "Asn.1";
+    }
+
+    private AttributesDescriptor[] createAttributesDescriptors() {
+        return OVERRIDDEN_HIGHLIGHTERS.entrySet()
+                .stream()
+                .map(entry -> new AttributesDescriptor(entry.getKey().getGroupName(), entry.getValue()))
+                .toArray(AttributesDescriptor[]::new);
     }
 }

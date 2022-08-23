@@ -64,9 +64,16 @@
         SEMICOLON = ";"
         COLON = ":"
         DOT = "."
+        DOUBLE_DOT = ".."
+        ID = "&"
+        OR = "|"
+        DOUBLE_QUOTE = "\""
+        MINUS = "-"
+        AT = "@"
 
         /* comments */
         COMMENT_LINE = "regexp:---.*"
+        COMMENT_HEADER = "regexp:--.*"
 
         /* type keywords */
         UTC_TIME = "UTCTime"
@@ -79,12 +86,18 @@
         NUMERIC_STRING = "NumericString"
         DATE_AND_TIME = "DateAndTime"
         IP_ADDRESS = "IPAddress"
-        DOUBLE_DOT = ".."
+        RAW_BYTES = "RawBytesBlock"
+        IP_PORT = "IPPort"
+        IP_MASK = "IPMask"
 
         /* Numbers */
         INT = "regexp:[0-9]+"
 
-        /* */
+        /* Identifiers */
+        VAR_ID = "regexp:\p{Ll}(-|\d|\p{Ll}|\p{Lu})*"
+        REF_ID = "regexp:\p{Lu}(\p{L})*"
+
+        /* white space */
         CRLF="regexp:\R"
         WHITE_SPACE="regexp:[\n\t\f]"
   ]
@@ -94,18 +107,20 @@
 
 asnFile ::= !<<eof>> program
 program ::= element *
-private element ::= { pin=2 recoverWhile=property_recover }
-private property_recover ::= !(
+private element ::= { recoverWhile=element_recover }
+private element_recover ::= !(
 BEGIN | IMPLICIT | TAGGED | TAGS | CLASS | EXPORTS | IMPORTS | ENUMERATED | SEQUENCE | CHOICE | UNIQUE | DEFINITIONS |
 OID | DATA | SIZE | FROM | END | SEQUENCE_OF | WITH_SYNTAX |
 
 LPAREN | RPAREN | LBRACE | RBRACE | LBRACKET | RBRACKET |
 
-LET | COMMA | SEMICOLON | COLON | DOT |
+LET | COMMA | SEMICOLON | COLON | DOT | DOUBLE_DOT | ID | OR | DOUBLE_QUOTE | MINUS | AT |
 
-COMMENT |
+COMMENT | COMMENT_HEADER |
 
-UTC_TIME | UTF8STRING | INTEGER | NULL | OPTIONAL | BOOLEAN | OCTET_STRING | NUMERIC_STRING | DATE_AND_TIME | IP_ADDRESS | DOUBLE_DOT
+UTC_TIME | UTF8STRING | INTEGER | NULL | OPTIONAL | BOOLEAN | OCTET_STRING | NUMERIC_STRING | DATE_AND_TIME | IP_ADDRESS | RAW_BYTES | IP_PORT | IP_MASK |
+
+VAR_ID | REF_ID
 
 INT)
 
