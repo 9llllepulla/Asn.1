@@ -44,13 +44,13 @@ public class AsnParserDefinition implements ParserDefinition {
     private static final TokenSet COMMENTS_TOKEN = TokenSet.create(COMMENT_LINE, COMMENT_HEADER);
 
     public static final Map<TokenGroup, TokenSet> TOKEN_GROUPS = Map.of(
-            TokenGroup.NUMBERS, TokenSet.create(INT, DOUBLE_DOT, DOT),
-            TokenGroup.BRACKETS, TokenSet.create(LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET),
+            TokenGroup.NUMBERS, TokenSet.create(INT, DOUBLE_DOT, DOT, MINUS),
+            TokenGroup.BRACKETS, TokenSet.create(LPAREN, RPAREN, LBRACKET, RBRACKET),
             TokenGroup.KEYWORDS, TokenSet.create(BEGIN, IMPLICIT, TAGGED, TAGS, CLASS, EXPORTS, IMPORTS, ENUMERATED, SEQUENCE, CHOICE,
-                    UNIQUE, OID, DATA, SIZE, FROM, END, DEFINITIONS, WITH_SYNTAX, SEQUENCE_OF),
+                    UNIQUE, OID, DATA, SIZE, FROM, END, DEFINITIONS, WITH_SYNTAX, SEQUENCE_OF, LBRACE, RBRACE),
             TokenGroup.TYPE_KEYWORDS, TokenSet.create(UTC_TIME, UTF8STRING, INTEGER, NULL, OPTIONAL, BOOLEAN, OCTET_STRING,
-                    DATE_AND_TIME, IP_ADDRESS, NUMERIC_STRING),
-            TokenGroup.OPERATORS, TokenSet.create(LET, COMMA, SEMICOLON, COLON),
+                    DATE_AND_TIME, NUMERIC_STRING, RAW_BYTES, IP_ADDRESS, IP_MASK, IP_PORT),
+            TokenGroup.OPERATORS, TokenSet.create(LET, COMMA, SEMICOLON, COLON, ID, OR, AT, DOUBLE_QUOTE),
             TokenGroup.COMMENTS, COMMENTS_TOKEN,
             TokenGroup.VAR, TokenSet.create(VAR_ID),
             TokenGroup.REF, TokenSet.create(REF_ID),

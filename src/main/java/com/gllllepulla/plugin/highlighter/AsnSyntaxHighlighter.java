@@ -34,7 +34,7 @@ import static com.gllllepulla.plugin.parser.AsnParserDefinition.*;
 
 public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    private static final Map<TokenGroup, TextAttributesKey> OVERRIDDEN_HIGHLIGHTERS = Map.of(
+    public static final Map<TokenGroup, TextAttributesKey> OVERRIDDEN_HIGHLIGHTERS = Map.of(
             TokenGroup.KEYWORDS, DefaultLanguageHighlighterColors.STATIC_METHOD,
             TokenGroup.NUMBERS, DefaultLanguageHighlighterColors.CLASS_REFERENCE,
             TokenGroup.BRACKETS, DefaultLanguageHighlighterColors.KEYWORD,
@@ -63,9 +63,9 @@ public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
     @Override
     public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
         return asnDefinitions.keySet()
-                .stream()
+                .parallelStream()
                 .filter(tokenSet -> tokenSet.contains(tokenType))
-                .findFirst()
+                .findAny()
                 .map(asnDefinitions::get)
                 .orElse(new TextAttributesKey[0]);
     }
