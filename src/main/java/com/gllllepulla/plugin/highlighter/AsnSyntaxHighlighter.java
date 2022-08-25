@@ -43,7 +43,7 @@ public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
             TokenGroup.COMMENTS, DefaultLanguageHighlighterColors.BLOCK_COMMENT,
             TokenGroup.VAR, DefaultLanguageHighlighterColors.STRING,
             TokenGroup.REF, DefaultLanguageHighlighterColors.CLASS_REFERENCE,
-            TokenGroup.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER
+            TokenGroup.ASN_BAD_CHARACTER, HighlighterColors.BAD_CHARACTER
     );
 
     private static Map<TokenSet, TextAttributesKey[]> asnDefinitions;
@@ -76,7 +76,7 @@ public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
                 .collect(toMap(
                         entry -> AsnParserDefinition.TOKEN_GROUPS.get(entry.getKey()),
                         entry -> {
-                            var textAttributesKey = createTextAttributesKey(entry.getKey().getGroupName(), entry.getValue());
+                            var textAttributesKey = createTextAttributesKey(entry.getKey().name(), entry.getValue());
                             return new TextAttributesKey[]{textAttributesKey};
                         }));
     }
