@@ -88,7 +88,7 @@ public class AsnColorSettingsPage implements ColorSettingsPage {
         return OVERRIDDEN_HIGHLIGHTERS.entrySet()
                 .parallelStream()
                 .filter(entry -> !entry.getKey().equals(AsnParserDefinition.TokenGroup.ASN_BAD_CHARACTER))
-                .map(entry -> new AttributesDescriptor(entry.getKey().getMenuName(), entry.getValue()))
+                .map(entry -> new AttributesDescriptor(entry.getKey().getDescription(), entry.getValue()))
                 .toArray(AttributesDescriptor[]::new);
     }
 }

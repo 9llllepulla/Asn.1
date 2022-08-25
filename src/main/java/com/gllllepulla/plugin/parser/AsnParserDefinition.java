@@ -120,14 +120,14 @@ public class AsnParserDefinition implements ParserDefinition {
         REF("References"),
         ASN_BAD_CHARACTER("ASN_BAD_CHARACTER");
 
-        private final String menuName;
+        private final String description;
 
-        TokenGroup(String menuName) {
-            this.menuName = menuName;
+        TokenGroup(String description) {
+            this.description = description;
         }
 
-        public String getMenuName() {
-            return menuName;
+        public String getDescription() {
+            return description;
         }
     }
 }
