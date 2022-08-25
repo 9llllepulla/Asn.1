@@ -54,7 +54,7 @@ public class AsnParserDefinition implements ParserDefinition {
             TokenGroup.COMMENTS, COMMENTS_TOKEN,
             TokenGroup.VAR, TokenSet.create(VAR_ID),
             TokenGroup.REF, TokenSet.create(REF_ID),
-            TokenGroup.BAD_CHARACTER, TokenSet.create(TokenType.BAD_CHARACTER)
+            TokenGroup.ASN_BAD_CHARACTER, TokenSet.create(TokenType.BAD_CHARACTER)
     );
 
     @NotNull
@@ -110,24 +110,24 @@ public class AsnParserDefinition implements ParserDefinition {
     }
 
     public enum TokenGroup {
-        NUMBERS("NUMBERS"),
-        COMMENTS("COMMENTS"),
-        BRACKETS("BRACKETS"),
-        KEYWORDS("KEYWORDS"),
-        TYPE_KEYWORDS("TYPE_KEYWORDS"),
-        OPERATORS("OPERATORS"),
-        VAR("VAR"),
-        REF("REF"),
-        BAD_CHARACTER("ASN_BAD_CHARACTER");
+        NUMBERS("Numbers"),
+        COMMENTS("Comment"),
+        BRACKETS("Brackets"),
+        KEYWORDS("Keywords"),
+        TYPE_KEYWORDS("Type keywords"),
+        OPERATORS("Operators"),
+        VAR("Variables"),
+        REF("References"),
+        ASN_BAD_CHARACTER("ASN_BAD_CHARACTER");
 
-        private final String groupName;
+        private final String menuName;
 
-        TokenGroup(String groupName) {
-            this.groupName = groupName;
+        TokenGroup(String menuName) {
+            this.menuName = menuName;
         }
 
-        public String getGroupName() {
-            return groupName;
+        public String getMenuName() {
+            return menuName;
         }
     }
 }
