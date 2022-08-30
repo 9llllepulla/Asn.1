@@ -15,9 +15,8 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-/src/main/java/com/gllllepulla/plugin/grammar/exmpl.bnf
-/src/main/java/com/gllllepulla/plugin/grammar/monkey.bnf
-/src/main/java/com/gllllepulla/plugin/grammar/monkey.flex
+!/src/main/java/com/gllllepulla/plugin/grammar/Asn.bnf
+/src/main/java/com/gllllepulla/plugin/grammar/*.bnf
 
 /src/main/gen
 /src/main/kotlin
