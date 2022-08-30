@@ -29,27 +29,68 @@
   tokenTypeClass="com.gllllepulla.plugin.psi.AsnTokenType"
 
   tokens = [
-        /* keywords */
+        /* Global type */
+        UNIVERSAL = "UNIVERSAL"
+        APPLICATION = "APPLICATION"
+        PRIVATE = "PRIVATE"
+        CONTENT_SPECIFIC = "CONTENT-SPECIFIC"
+        /* Construct definition */
+        SET = "SET"
+        EXTERNAL = "EXTERNAL"
+        INSTANCE = "INSTANCE"
+        SEQUENCE = "SEQUENCE"
+        OF = "OF"
         BEGIN = "BEGIN"
-        IMPLICIT = "IMPLICIT"
-        TAGGED = "TAGGED"
-        TAGS = "TAGS"
+        END = "END"
+        DEFINITIONS = "DEFINITIONS"
+        FROM = "FROM"
         CLASS = "CLASS"
+        TAGGED = "TAGGED"
+        ANY = "ANY"
+        CHOICE = "CHOICE"
+        IMPLICIT = "IMPLICIT"
+        EXPLICIT = "EXPLICIT"
+        SIZE = "SIZE"
+        MAX = "MAX"
+        MIN = "MIN"
+        ENUMERATED = "ENUMERATED"
+        WITH = "WITH"
+        SYNTAX = "SYNTAX"
+        /* universal type */
+        INTEGER = "INTEGER"
+        NULL = "NULL"
+        BOOLEAN = "BOOLEAN"
+        OID = "OID"
+        RELATIVE_OID = "RELATIVE-OID"
+        OID_IRI = "OID-IRI"
+        RELATIVE_OID_IRI = "RELATIVE-OID-IRI"
+        REAL = "REAL"
+        OPTIONAL = "OPTIONAL"
+        DEFAULT = "DEFAULT"
+        UNIQUE = "UNIQUE"
+        EOC = "EOC"
+        /* Bit string */
+        OCTET = "OCTET STRING"
+        BIT = "BIT STRING"
+        /* Type string */
+        STRING_NUM = "NumericString"
+        STRING_PR = "PrintableString"
+        STRING_TELE = "TeletextString"
+        STRING_VTEXT = "VideotexString"
+        STRING_VIS = "VisibleString"
+        STRING_IA5 = "IA5String"
+        STRING_GRAPH = "GraphicString"
+        STRING_BMP = "BMPString"
+        STRING_GEN = "GeneralString"
+        STRING_UNI = "UniversalString"
+        STRING_UTF8 = "UTF8String"
+        STRING_CHAR = "CHARACTER STRING"
+        /* other keywords */
+        TAGS = "TAGS"
         EXPORTS = "EXPORTS"
         IMPORTS = "IMPORTS"
-        ENUMERATED = "ENUMERATED"
-        SEQUENCE = "SEQUENCE"
-        SEQUENCE_OF = "SEQUENCE OF"
-        CHOICE = "CHOICE"
-        UNIQUE = "UNIQUE"
-        DEFINITIONS = "DEFINITIONS"
-        OID = "OID"
-        DATA = "DATA"
-        SIZE = "SIZE"
-        FROM = "FROM"
-        WITH_SYNTAX = "WITH SYNTAX"
-        END = "END"
-
+        CONTAINING = "CONTAINING"
+        TYPE_IDENTIFIER = "TYPE-IDENTIFIER"
         /* brackets */
         LPAREN = "("
         RPAREN = ")"
@@ -57,73 +98,82 @@
         RBRACE = "}"
         LBRACKET = "["
         RBRACKET = "]"
-
         /* Operators */
-        LET = "::="
+        ASSIGMENT = "::="
+        VAR = "&"
+        /* Symbols */
         COMMA = ","
         SEMICOLON = ";"
         COLON = ":"
         DOT = "."
         DOUBLE_DOT = ".."
-        ID = "&"
         OR = "|"
         DOUBLE_QUOTE = "\""
         MINUS = "-"
         AT = "@"
-
         /* comments */
         COMMENT_LINE = "regexp:---.*"
         COMMENT_HEADER = "regexp:--.*"
-
-        /* type keywords */
-        UTC_TIME = "UTCTime"
-        UTF8STRING = "UTF8String"
-        INTEGER = "INTEGER"
-        NULL = "NULL"
-        OPTIONAL = "OPTIONAL"
-        BOOLEAN = "BOOLEAN"
-        OCTET_STRING = "OCTET STRING"
-        NUMERIC_STRING = "NumericString"
-        DATE_AND_TIME = "DateAndTime"
-        IP_ADDRESS = "IPAddress"
-        RAW_BYTES = "RawBytesBlock"
-        IP_PORT = "IPPort"
-        IP_MASK = "IPMask"
-
-        /* Numbers */
-        INT = "regexp:[0-9]+"
-
+        COMMENT_MULTILINE = "regexp:/\*[\s\S]*?\*/"
+        /* Date and Time */
+        TIME_UTC = "UTCTime"
+        TIME_GEN = "GeneralizedTime"
+        TIME = "TIME"
+        TIME_OF_DAY = "TIME-OF-DAY"
+        DATE = "DATE"
+        DATE_TIME = "DATE-TIME"
+        DURATION = "DURATION"
         /* Identifiers */
-        VAR_ID = "regexp:\p{Ll}(-|\d|\p{Ll}|\p{Lu})*"
-        REF_ID = "regexp:\p{Lu}(\p{L})*"
-
+        VALUE_REF = "regexp:[A-Z]([A-Za-z])*"
+        VALUE_NAME = "regexp:\p{Ll}(-|\d|\p{Ll}|\p{Lu})*"
+        VALUE_CLASS = "regexp:\p{Lu}(\p{Lu})*"
+        /* Primitive */
+        STR_LITERALS = "regexp:\"[^\"]*\""
+        NUMBER_INT = "regexp:[0-9]+"
+        NUMBER_FLOAT = "regexp:\d/.(\d)* "
         /* white space */
-        CRLF="regexp:\R"
-        WHITE_SPACE="regexp:[\n\t\f]"
+        NEW_LINE = "regexp:(\r|\n|\r\n)"
+        WHITE_SPACE = "regexp:[\s\t\f]"
+        EMPTY_ELEMENT = "regexp:\x05"
   ]
 
   generateTokenAccessors=true
 }
-
-asnFile ::= !<<eof>> program
-program ::= element *
-private element ::= { recoverWhile=element_recover }
+asnFile ::= all
+all ::= element *
+private element ::= !<<eof>> { recoverWhile=element_recover }
 private element_recover ::= !(
-BEGIN | IMPLICIT | TAGGED | TAGS | CLASS | EXPORTS | IMPORTS | ENUMERATED | SEQUENCE | CHOICE | UNIQUE | DEFINITIONS |
-OID | DATA | SIZE | FROM | END | SEQUENCE_OF | WITH_SYNTAX |
-
+/* universal type */
+INTEGER | NULL | BOOLEAN | OID | RELATIVE_OID | OID_IRI | RELATIVE_OID_IRI | REAL | OPTIONAL | DEFAULT | UNIQUE | EOC |
+/* Bit string */
+OCTET | BIT |
+/* Type string */
+STRING_NUM | STRING_PR | STRING_TELE | STRING_VTEXT | STRING_VIS | STRING_IA5 | STRING_GRAPH | STRING_BMP | STRING_GEN |
+STRING_UNI | STRING_UTF8 | STRING_CHAR |
+/* brackets */
 LPAREN | RPAREN | LBRACE | RBRACE | LBRACKET | RBRACKET |
-
-LET | COMMA | SEMICOLON | COLON | DOT | DOUBLE_DOT | ID | OR | DOUBLE_QUOTE | MINUS | AT |
-
-COMMENT | COMMENT_HEADER |
-
-UTC_TIME | UTF8STRING | INTEGER | NULL | OPTIONAL | BOOLEAN | OCTET_STRING | NUMERIC_STRING | DATE_AND_TIME | IP_ADDRESS | RAW_BYTES | IP_PORT | IP_MASK |
-
-VAR_ID | REF_ID
-
-INT)
-
+/* Operators */
+ASSIGMENT | VAR |
+/* Symbols */
+COMMA | SEMICOLON | COLON | DOT | DOUBLE_DOT | OR | DOUBLE_QUOTE | MINUS | AT |
+/* comments */
+COMMENT_LINE | COMMENT_HEADER | COMMENT_MULTILINE |
+/* Date and Time */
+TIME_UTC | TIME_GEN | TIME | TIME_OF_DAY | DATE | DATE_TIME | DURATION |
+/* Primitives */
+STR_LITERALS | NUMBER_INT | NUMBER_FLOAT |
+/* white space */
+NEW_LINE | WHITE_SPACE | NULL_ELEMENT |
+/* Global type */
+UNIVERSAL | APPLICATION | PRIVATE | CONTENT_SPECIFIC |
+/* Construct definition */
+SET | EXTERNAL | INSTANCE | SEQUENCE | OF | BEGIN | END | DEFINITIONS | FROM | CLASS | TAGGED | ANY | CHOICE |
+IMPLICIT | EXPLICIT | SIZE | MAX | MIN | ENUMERATED | WITH | SYNTAX |
+/* other keywords */
+TAGS | EXPORTS | IMPORTS | CONTAINING | TYPE_IDENTIFIER
+/* Identifiers */
+VALUE_CLASS | VALUE_REF | VALUE_NAME |
+)
 
 
 
