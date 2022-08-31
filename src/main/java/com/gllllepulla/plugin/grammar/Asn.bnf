@@ -133,47 +133,27 @@
         NUMBER_FLOAT = "regexp:\d/.(\d)* "
         /* white space */
         NEW_LINE = "regexp:(\r|\n|\r\n)"
-        WHITE_SPACE = "regexp:[\s\t\f]"
+        WHITE_SPACE = "regexp:[\s\t\f\x0B]"
         EMPTY_ELEMENT = "regexp:\x05"
   ]
 
   generateTokenAccessors=true
 }
-asnFile ::= all
-all ::= element *
-private element ::= !<<eof>> { recoverWhile=element_recover }
-private element_recover ::= !(
-/* universal type */
-INTEGER | NULL | BOOLEAN | OID | RELATIVE_OID | OID_IRI | RELATIVE_OID_IRI | REAL | OPTIONAL | DEFAULT | UNIQUE | EOC |
-/* Bit string */
-OCTET | BIT |
-/* Type string */
-STRING_NUM | STRING_PR | STRING_TELE | STRING_VTEXT | STRING_VIS | STRING_IA5 | STRING_GRAPH | STRING_BMP | STRING_GEN |
-STRING_UNI | STRING_UTF8 | STRING_CHAR |
-/* brackets */
-LPAREN | RPAREN | LBRACE | RBRACE | LBRACKET | RBRACKET |
-/* Operators */
-ASSIGMENT | VAR |
-/* Symbols */
-COMMA | SEMICOLON | COLON | DOT | DOUBLE_DOT | OR | DOUBLE_QUOTE | MINUS | AT |
-/* comments */
-COMMENT_LINE | COMMENT_HEADER | COMMENT_MULTILINE |
-/* Date and Time */
-TIME_UTC | TIME_GEN | TIME | TIME_OF_DAY | DATE | DATE_TIME | DURATION |
-/* Primitives */
-STR_LITERALS | NUMBER_INT | NUMBER_FLOAT |
-/* white space */
-NEW_LINE | WHITE_SPACE | NULL_ELEMENT |
-/* Global type */
-UNIVERSAL | APPLICATION | PRIVATE | CONTENT_SPECIFIC |
-/* Construct definition */
-SET | EXTERNAL | INSTANCE | SEQUENCE | OF | BEGIN | END | DEFINITIONS | FROM | CLASS | TAGGED | ANY | CHOICE |
-IMPLICIT | EXPLICIT | SIZE | MAX | MIN | ENUMERATED | WITH | SYNTAX |
-/* other keywords */
-TAGS | EXPORTS | IMPORTS | CONTAINING | TYPE_IDENTIFIER
-/* Identifiers */
-VALUE_CLASS | VALUE_REF | VALUE_NAME |
-)
+program                         ::= NEW_LINE* file_header
+file_header                     ::= VALUE_REF DEFINITIONS IMPLICIT TAGS ASSIGMENT BEGIN exports_ imports_? { pin=6 }
+/* export & import */
+exports_                        ::= EXPORTS {value_ COMMA}* value_ SEMICOLON { pin=1 }
+imports_                        ::= IMPORTS from_* SEMICOLON { pin=1 }
+from_                           ::= value_ {COMMA value_}* FROM VALUE_REF
+value_                          ::= (TAGGED|VALUE_REF|VALUE_NAME)
+
+
+
+
+
+
+
+
 
 
 
