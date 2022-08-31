@@ -56,7 +56,7 @@ public class AsnParserDefinition implements ParserDefinition {
             Map.entry(TokenGroup.IDENTIFIERS, TokenSet.create(VALUE_CLASS, VALUE_REF, VALUE_NAME)),
             Map.entry(TokenGroup.PRIMITIVES, TokenSet.create(STR_LITERALS, NUMBER_FLOAT, NUMBER_INT)),
             Map.entry(TokenGroup.GLOBAL_TYPES, TokenSet.create(UNIVERSAL, APPLICATION, CONTENT_SPECIFIC, PRIVATE)),
-            Map.entry(TokenGroup.CONSTRUCTS, TokenSet.create(SET, SET_OF, EXTERNAL, INSTANCE, SEQUENCE, OF, BEGIN, END, DEFINITIONS, FROM, CLASS, TAGGED, ANY,
+            Map.entry(TokenGroup.CONSTRUCTS, TokenSet.create(SET, EXTERNAL, INSTANCE, SEQUENCE, OF, BEGIN, END, DEFINITIONS, FROM, CLASS, TAGGED, ANY,
                     CHOICE, IMPLICIT, EXPLICIT, SIZE, MAX, MIN, ENUMERATED, WITH, SYNTAX,
                     /* other */ TAGS, EXPORTS, IMPORTS, CONTAINING, TYPE_IDENTIFIER)),
             Map.entry(TokenGroup.ASN_BAD_CHARACTER, TokenSet.create(TokenType.BAD_CHARACTER)));
