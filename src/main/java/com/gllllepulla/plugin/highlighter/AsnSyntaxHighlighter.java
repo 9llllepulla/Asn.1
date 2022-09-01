@@ -34,16 +34,20 @@ import static com.gllllepulla.plugin.parser.AsnParserDefinition.*;
 
 public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    public static final Map<TokenGroup, TextAttributesKey> OVERRIDDEN_HIGHLIGHTERS = Map.of(
-            TokenGroup.KEYWORDS, DefaultLanguageHighlighterColors.STATIC_METHOD,
-            TokenGroup.NUMBERS, DefaultLanguageHighlighterColors.CLASS_REFERENCE,
-            TokenGroup.BRACKETS, DefaultLanguageHighlighterColors.KEYWORD,
-            TokenGroup.TYPE_KEYWORDS, DefaultLanguageHighlighterColors.STATIC_FIELD,
-            TokenGroup.OPERATORS, DefaultLanguageHighlighterColors.KEYWORD,
-            TokenGroup.COMMENTS, DefaultLanguageHighlighterColors.BLOCK_COMMENT,
-            TokenGroup.VAR, DefaultLanguageHighlighterColors.STRING,
-            TokenGroup.REF, DefaultLanguageHighlighterColors.CLASS_REFERENCE,
-            TokenGroup.ASN_BAD_CHARACTER, HighlighterColors.BAD_CHARACTER
+    public static final Map<TokenGroup, TextAttributesKey> OVERRIDDEN_HIGHLIGHTERS = Map.ofEntries(
+            Map.entry(TokenGroup.CONSTRUCTS, DefaultLanguageHighlighterColors.STATIC_METHOD),
+            Map.entry(TokenGroup.UNI_TYPES, DefaultLanguageHighlighterColors.CLASS_REFERENCE),
+            Map.entry(TokenGroup.TYPE_STRINGS, DefaultLanguageHighlighterColors.STATIC_FIELD),
+            Map.entry(TokenGroup.IDENTIFIERS, DefaultLanguageHighlighterColors.STRING),
+            Map.entry(TokenGroup.PRIMITIVES, DefaultLanguageHighlighterColors.CLASS_REFERENCE),
+            Map.entry(TokenGroup.BIT_STRINGS, DefaultLanguageHighlighterColors.LABEL),
+            Map.entry(TokenGroup.BRACKETS, DefaultLanguageHighlighterColors.KEYWORD),
+            Map.entry(TokenGroup.OPERATORS, DefaultLanguageHighlighterColors.KEYWORD),
+            Map.entry(TokenGroup.COMMENTS, DefaultLanguageHighlighterColors.BLOCK_COMMENT),
+            Map.entry(TokenGroup.SYMBOLS, DefaultLanguageHighlighterColors.COMMA),
+            Map.entry(TokenGroup.DATE_TIME, DefaultLanguageHighlighterColors.CLASS_NAME),
+            Map.entry(TokenGroup.GLOBAL_TYPES, DefaultLanguageHighlighterColors.GLOBAL_VARIABLE),
+            Map.entry(TokenGroup.ASN_BAD_CHARACTER, HighlighterColors.BAD_CHARACTER)
     );
 
     private static Map<TokenSet, TextAttributesKey[]> asnDefinitions;

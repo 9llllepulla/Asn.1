@@ -29,27 +29,68 @@
   tokenTypeClass="com.gllllepulla.plugin.psi.AsnTokenType"
 
   tokens = [
-        /* keywords */
+        /* Global type */
+        UNIVERSAL = "UNIVERSAL"
+        APPLICATION = "APPLICATION"
+        PRIVATE = "PRIVATE"
+        CONTENT_SPECIFIC = "CONTENT-SPECIFIC"
+        /* Construct definition */
+        SET = "SET"
+        EXTERNAL = "EXTERNAL"
+        INSTANCE = "INSTANCE"
+        SEQUENCE = "SEQUENCE"
+        OF = "OF"
         BEGIN = "BEGIN"
-        IMPLICIT = "IMPLICIT"
-        TAGGED = "TAGGED"
-        TAGS = "TAGS"
+        END = "END"
+        DEFINITIONS = "DEFINITIONS"
+        FROM = "FROM"
         CLASS = "CLASS"
+        TAGGED = "TAGGED"
+        ANY = "ANY"
+        CHOICE = "CHOICE"
+        IMPLICIT = "IMPLICIT"
+        EXPLICIT = "EXPLICIT"
+        SIZE = "SIZE"
+        MAX = "MAX"
+        MIN = "MIN"
+        ENUMERATED = "ENUMERATED"
+        WITH = "WITH"
+        SYNTAX = "SYNTAX"
+        /* universal type */
+        INTEGER = "INTEGER"
+        NULL = "NULL"
+        BOOLEAN = "BOOLEAN"
+        OID = "OID"
+        RELATIVE_OID = "RELATIVE-OID"
+        OID_IRI = "OID-IRI"
+        RELATIVE_OID_IRI = "RELATIVE-OID-IRI"
+        REAL = "REAL"
+        OPTIONAL = "OPTIONAL"
+        DEFAULT = "DEFAULT"
+        UNIQUE = "UNIQUE"
+        EOC = "EOC"
+        /* Bit string */
+        OCTET = "OCTET STRING"
+        BIT = "BIT STRING"
+        /* Type string */
+        STRING_NUM = "NumericString"
+        STRING_PR = "PrintableString"
+        STRING_TELE = "TeletextString"
+        STRING_VTEXT = "VideotexString"
+        STRING_VIS = "VisibleString"
+        STRING_IA5 = "IA5String"
+        STRING_GRAPH = "GraphicString"
+        STRING_BMP = "BMPString"
+        STRING_GEN = "GeneralString"
+        STRING_UNI = "UniversalString"
+        STRING_UTF8 = "UTF8String"
+        STRING_CHAR = "CHARACTER STRING"
+        /* other keywords */
+        TAGS = "TAGS"
         EXPORTS = "EXPORTS"
         IMPORTS = "IMPORTS"
-        ENUMERATED = "ENUMERATED"
-        SEQUENCE = "SEQUENCE"
-        SEQUENCE_OF = "SEQUENCE OF"
-        CHOICE = "CHOICE"
-        UNIQUE = "UNIQUE"
-        DEFINITIONS = "DEFINITIONS"
-        OID = "OID"
-        DATA = "DATA"
-        SIZE = "SIZE"
-        FROM = "FROM"
-        WITH_SYNTAX = "WITH SYNTAX"
-        END = "END"
-
+        CONTAINING = "CONTAINING"
+        TYPE_IDENTIFIER = "TYPE-IDENTIFIER"
         /* brackets */
         LPAREN = "("
         RPAREN = ")"
@@ -57,72 +98,84 @@
         RBRACE = "}"
         LBRACKET = "["
         RBRACKET = "]"
-
         /* Operators */
-        LET = "::="
+        ASSIGMENT = "::="
+        VAR = "&"
+        /* Symbols */
         COMMA = ","
         SEMICOLON = ";"
         COLON = ":"
         DOT = "."
         DOUBLE_DOT = ".."
-        ID = "&"
         OR = "|"
         DOUBLE_QUOTE = "\""
         MINUS = "-"
         AT = "@"
-
         /* comments */
         COMMENT_LINE = "regexp:---.*"
         COMMENT_HEADER = "regexp:--.*"
-
-        /* type keywords */
-        UTC_TIME = "UTCTime"
-        UTF8STRING = "UTF8String"
-        INTEGER = "INTEGER"
-        NULL = "NULL"
-        OPTIONAL = "OPTIONAL"
-        BOOLEAN = "BOOLEAN"
-        OCTET_STRING = "OCTET STRING"
-        NUMERIC_STRING = "NumericString"
-        DATE_AND_TIME = "DateAndTime"
-        IP_ADDRESS = "IPAddress"
-        RAW_BYTES = "RawBytesBlock"
-        IP_PORT = "IPPort"
-        IP_MASK = "IPMask"
-
-        /* Numbers */
-        INT = "regexp:[0-9]+"
-
+        COMMENT_MULTILINE = "regexp:/\*[\s\S]*?\*/"
+        /* Date and Time */
+        TIME_UTC = "UTCTime"
+        TIME_GEN = "GeneralizedTime"
+        TIME = "TIME"
+        TIME_OF_DAY = "TIME-OF-DAY"
+        DATE = "DATE"
+        DATE_TIME = "DATE-TIME"
+        DURATION = "DURATION"
         /* Identifiers */
-        VAR_ID = "regexp:\p{Ll}(-|\d|\p{Ll}|\p{Lu})*"
-        REF_ID = "regexp:\p{Lu}(\p{L})*"
-
+        VALUE_REF = "regexp:[A-Z]([A-Za-z])*"
+        VALUE_NAME = "regexp:\p{Ll}(-|\d|\p{Ll}|\p{Lu})*"
+        VALUE_CLASS = "regexp:\p{Lu}(\p{Lu})*"
+        /* Primitive */
+        STR_LITERALS = "regexp:\"[^\"]*\""
+        NUMBER_INT = "regexp:[0-9]+"
+        NUMBER_FLOAT = "regexp:\d/.(\d)* "
         /* white space */
-        CRLF="regexp:\R"
-        WHITE_SPACE="regexp:[\n\t\f]"
+        NEW_LINE = "regexp:(\r|\n|\r\n)"
+        WHITE_SPACE = "regexp:[\s\t\f\x0B]"
+        EMPTY_ELEMENT = "regexp:\x05"
   ]
 
   generateTokenAccessors=true
 }
+program                         ::= NEW_LINE* file_header
+file_header                     ::= VALUE_REF DEFINITIONS IMPLICIT TAGS ASSIGMENT BEGIN exports_ imports_? constructs_ { pin=6 }
+/* elements */
+values_                         ::= VALUE_REF|VALUE_NAME
+int_round                       ::= LPAREN NUMBER_INT RPAREN { pin=1 }
+int_square                      ::= LBRACKET NUMBER_INT RBRACKET { pin=1 }
+range_                          ::= LPAREN NUMBER_INT DOUBLE_DOT NUMBER_INT RPAREN { pin=1 }
+size_range                      ::= LPAREN SIZE range_ RPAREN { pin=1 }
+integer_range                   ::= INTEGER range_
+primitive                       ::= INTEGER|BOOLEAN|REAL|NULL
+/* export & import */
+exports_                        ::= EXPORTS {(TAGGED|values_) COMMA}* (TAGGED|values_) SEMICOLON { pin=1 }
+imports_                        ::= IMPORTS from_* SEMICOLON { pin=1 }
+from_                           ::= (TAGGED|values_) {COMMA (TAGGED|values_)}* FROM VALUE_REF
+/* constructors */
+constructs_                     ::= value_assigment|tagged_assigment
+value_assigment                 ::= VALUE_REF ASSIGMENT (body_choice|body_enum|body_sequence) { pin=2 }
+/* bodies */
+body_choice                     ::= CHOICE LBRACE choice_element {COMMA choice_element}* RBRACE { pin=2 }
+choice_element                  ::= VALUE_NAME int_square (VALUE_REF|type_string|primitive)
+type_string                     ::= STRING_NUM|STRING_PR|STRING_TELE| STRING_VTEXT|STRING_VIS|STRING_IA5|STRING_GRAPH|
+                                    STRING_BMP|STRING_GEN|STRING_UNI|STRING_UTF8|STRING_CHAR size_range?
 
-asnFile ::= !<<eof>> program
-program ::= element *
-private element ::= { recoverWhile=element_recover }
-private element_recover ::= !(
-BEGIN | IMPLICIT | TAGGED | TAGS | CLASS | EXPORTS | IMPORTS | ENUMERATED | SEQUENCE | CHOICE | UNIQUE | DEFINITIONS |
-OID | DATA | SIZE | FROM | END | SEQUENCE_OF | WITH_SYNTAX |
+body_enum                       ::= ENUMERATED LBRACE enum_element {COMMA enum_element}* RBRACE { pin=2 }
+enum_element                    ::= VALUE_NAME int_round
 
-LPAREN | RPAREN | LBRACE | RBRACE | LBRACKET | RBRACKET |
+body_sequence                   ::= SEQUENCE LBRACE (variable_seq {COMMA variable_seq}*)|seq_of RBRACE { pin=2 }
+variable_seq                    ::= VALUE_NAME int_square? (VALUE_REF|type_string|integer_range) OPTIONAL?
+seq_of                          ::= SEQUENCE OF VALUE_REF { pin=2 }
 
-LET | COMMA | SEMICOLON | COLON | DOT | DOUBLE_DOT | ID | OR | DOUBLE_QUOTE | MINUS | AT |
+tagged_assigment                ::= values_ TAGGED ASSIGMENT body_tagged { pin=3 }
 
-COMMENT | COMMENT_HEADER |
+body_tagged                     ::= LBRACE (variable_or|oid_) RBRACE
+variable_or                     ::= VALUE_NAME {OR VALUE_NAME}*
+oid_                            ::= OID LBRACE VALUE_NAME RBRACE
 
-UTC_TIME | UTF8STRING | INTEGER | NULL | OPTIONAL | BOOLEAN | OCTET_STRING | NUMERIC_STRING | DATE_AND_TIME | IP_ADDRESS | RAW_BYTES | IP_PORT | IP_MASK |
 
-VAR_ID | REF_ID
-
-INT)
 
 
 

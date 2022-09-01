@@ -41,21 +41,25 @@ public class AsnParserDefinition implements ParserDefinition {
     public static final IFileElementType FILE = new IFileElementType(AsnLanguage.INSTANCE);
 
     private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    private static final TokenSet COMMENTS_TOKEN = TokenSet.create(COMMENT_LINE, COMMENT_HEADER);
+    private static final TokenSet COMMENTS_TOKEN = TokenSet.create(COMMENT_LINE, COMMENT_HEADER, COMMENT_MULTILINE);
 
-    public static final Map<TokenGroup, TokenSet> TOKEN_GROUPS = Map.of(
-            TokenGroup.NUMBERS, TokenSet.create(INT, DOUBLE_DOT, DOT, MINUS),
-            TokenGroup.BRACKETS, TokenSet.create(LPAREN, RPAREN, LBRACKET, RBRACKET),
-            TokenGroup.KEYWORDS, TokenSet.create(BEGIN, IMPLICIT, TAGGED, TAGS, CLASS, EXPORTS, IMPORTS, ENUMERATED, SEQUENCE, CHOICE,
-                    UNIQUE, OID, DATA, SIZE, FROM, END, DEFINITIONS, WITH_SYNTAX, SEQUENCE_OF, LBRACE, RBRACE),
-            TokenGroup.TYPE_KEYWORDS, TokenSet.create(UTC_TIME, UTF8STRING, INTEGER, NULL, OPTIONAL, BOOLEAN, OCTET_STRING,
-                    DATE_AND_TIME, NUMERIC_STRING, RAW_BYTES, IP_ADDRESS, IP_MASK, IP_PORT),
-            TokenGroup.OPERATORS, TokenSet.create(LET, COMMA, SEMICOLON, COLON, ID, OR, AT, DOUBLE_QUOTE),
-            TokenGroup.COMMENTS, COMMENTS_TOKEN,
-            TokenGroup.VAR, TokenSet.create(VAR_ID),
-            TokenGroup.REF, TokenSet.create(REF_ID),
-            TokenGroup.ASN_BAD_CHARACTER, TokenSet.create(TokenType.BAD_CHARACTER)
-    );
+    public static final Map<TokenGroup, TokenSet> TOKEN_GROUPS = Map.ofEntries(
+            Map.entry(TokenGroup.UNI_TYPES, TokenSet.create(INTEGER, NULL, BOOLEAN, OID, OID_IRI, RELATIVE_OID, RELATIVE_OID_IRI, REAL, OPTIONAL, DEFAULT, UNIQUE, EOC)),
+            Map.entry(TokenGroup.BIT_STRINGS, TokenSet.create(BIT, OCTET)),
+            Map.entry(TokenGroup.TYPE_STRINGS, TokenSet.create(STRING_BMP, STRING_CHAR, STRING_PR, STRING_GEN, STRING_GRAPH, STRING_IA5, STRING_NUM, STRING_UTF8,
+                    STRING_UNI, STRING_VIS, STRING_TELE, STRING_VTEXT)),
+            Map.entry(TokenGroup.BRACKETS, TokenSet.create(LPAREN, RPAREN, LBRACKET, RBRACKET)),
+            Map.entry(TokenGroup.OPERATORS, TokenSet.create(VAR, ASSIGMENT)),
+            Map.entry(TokenGroup.SYMBOLS, TokenSet.create(COMMA, SEMICOLON, DOUBLE_DOT, DOT, OR, MINUS, AT, COLON, DOUBLE_QUOTE)),
+            Map.entry(TokenGroup.COMMENTS, COMMENTS_TOKEN),
+            Map.entry(TokenGroup.DATE_TIME, TokenSet.create(DURATION, DATE, DATE_TIME, TIME, TIME_GEN, TIME_OF_DAY, TIME_UTC)),
+            Map.entry(TokenGroup.IDENTIFIERS, TokenSet.create(VALUE_CLASS, VALUE_REF, VALUE_NAME)),
+            Map.entry(TokenGroup.PRIMITIVES, TokenSet.create(STR_LITERALS, NUMBER_FLOAT, NUMBER_INT)),
+            Map.entry(TokenGroup.GLOBAL_TYPES, TokenSet.create(UNIVERSAL, APPLICATION, CONTENT_SPECIFIC, PRIVATE)),
+            Map.entry(TokenGroup.CONSTRUCTS, TokenSet.create(SET, EXTERNAL, INSTANCE, SEQUENCE, OF, BEGIN, END, DEFINITIONS, FROM, CLASS, TAGGED, ANY,
+                    CHOICE, IMPLICIT, EXPLICIT, SIZE, MAX, MIN, ENUMERATED, WITH, SYNTAX,
+                    /* other */ TAGS, EXPORTS, IMPORTS, CONTAINING, TYPE_IDENTIFIER)),
+            Map.entry(TokenGroup.ASN_BAD_CHARACTER, TokenSet.create(TokenType.BAD_CHARACTER)));
 
     @NotNull
     @Override
@@ -110,24 +114,28 @@ public class AsnParserDefinition implements ParserDefinition {
     }
 
     public enum TokenGroup {
-        NUMBERS("Numbers"),
-        COMMENTS("Comment"),
+        UNI_TYPES("Universal type"),
+        BIT_STRINGS("Bit string"),
+        TYPE_STRINGS("Type string"),
         BRACKETS("Brackets"),
-        KEYWORDS("Keywords"),
-        TYPE_KEYWORDS("Type keywords"),
-        OPERATORS("Operators"),
-        VAR("Variables"),
-        REF("References"),
+        OPERATORS("Operator"),
+        SYMBOLS("Symbol"),
+        COMMENTS("Comment"),
+        DATE_TIME("Date and Time"),
+        IDENTIFIERS("Identifier"),
+        PRIMITIVES("Primitive"),
+        GLOBAL_TYPES("Global type"),
+        CONSTRUCTS("Construct definition"),
         ASN_BAD_CHARACTER("ASN_BAD_CHARACTER");
 
-        private final String menuName;
+        private final String description;
 
-        TokenGroup(String menuName) {
-            this.menuName = menuName;
+        TokenGroup(String description) {
+            this.description = description;
         }
 
-        public String getMenuName() {
-            return menuName;
+        public String getDescription() {
+            return description;
         }
     }
 }
