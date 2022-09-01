@@ -140,17 +140,40 @@
   generateTokenAccessors=true
 }
 program                         ::= NEW_LINE* file_header
-file_header                     ::= VALUE_REF DEFINITIONS IMPLICIT TAGS ASSIGMENT BEGIN exports_ imports_? { pin=6 }
+file_header                     ::= VALUE_REF DEFINITIONS IMPLICIT TAGS ASSIGMENT BEGIN exports_ imports_? constructs_ { pin=6 }
+/* elements */
+values_                         ::= VALUE_REF|VALUE_NAME
+int_round                       ::= LPAREN NUMBER_INT RPAREN { pin=1 }
+int_square                      ::= LBRACKET NUMBER_INT RBRACKET { pin=1 }
+range_                          ::= LPAREN NUMBER_INT DOUBLE_DOT NUMBER_INT RPAREN { pin=1 }
+size_range                      ::= LPAREN SIZE range_ RPAREN { pin=1 }
+integer_range                   ::= INTEGER range_
+primitive                       ::= INTEGER|BOOLEAN|REAL|NULL
 /* export & import */
-exports_                        ::= EXPORTS {value_ COMMA}* value_ SEMICOLON { pin=1 }
+exports_                        ::= EXPORTS {(TAGGED|values_) COMMA}* (TAGGED|values_) SEMICOLON { pin=1 }
 imports_                        ::= IMPORTS from_* SEMICOLON { pin=1 }
-from_                           ::= value_ {COMMA value_}* FROM VALUE_REF
-value_                          ::= (TAGGED|VALUE_REF|VALUE_NAME)
+from_                           ::= (TAGGED|values_) {COMMA (TAGGED|values_)}* FROM VALUE_REF
+/* constructors */
+constructs_                     ::= value_assigment|tagged_assigment
+value_assigment                 ::= VALUE_REF ASSIGMENT (body_choice|body_enum|body_sequence) { pin=2 }
+/* bodies */
+body_choice                     ::= CHOICE LBRACE choice_element {COMMA choice_element}* RBRACE { pin=2 }
+choice_element                  ::= VALUE_NAME int_square (VALUE_REF|type_string|primitive)
+type_string                     ::= STRING_NUM|STRING_PR|STRING_TELE| STRING_VTEXT|STRING_VIS|STRING_IA5|STRING_GRAPH|
+                                    STRING_BMP|STRING_GEN|STRING_UNI|STRING_UTF8|STRING_CHAR size_range?
 
+body_enum                       ::= ENUMERATED LBRACE enum_element {COMMA enum_element}* RBRACE { pin=2 }
+enum_element                    ::= VALUE_NAME int_round
 
+body_sequence                   ::= SEQUENCE LBRACE (variable_seq {COMMA variable_seq}*)|seq_of RBRACE { pin=2 }
+variable_seq                    ::= VALUE_NAME int_square? (VALUE_REF|type_string|integer_range) OPTIONAL?
+seq_of                          ::= SEQUENCE OF VALUE_REF { pin=2 }
 
+tagged_assigment                ::= values_ TAGGED ASSIGMENT body_tagged { pin=3 }
 
-
+body_tagged                     ::= LBRACE (variable_or|oid_) RBRACE
+variable_or                     ::= VALUE_NAME {OR VALUE_NAME}*
+oid_                            ::= OID LBRACE VALUE_NAME RBRACE
 
 
 
