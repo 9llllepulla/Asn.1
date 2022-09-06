@@ -22,4 +22,4 @@ out/
 /src/main/kotlin
 
 *.flex
-/src/main/java/com/gllllepulla/plugin/grammar/Language_Description.md
+/src/main/java/com/gllllepulla/plugin/grammar/Lang_Description.md
