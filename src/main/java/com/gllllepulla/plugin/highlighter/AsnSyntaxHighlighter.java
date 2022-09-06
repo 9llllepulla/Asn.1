@@ -45,7 +45,7 @@ public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
             Map.entry(TokenGroup.OPERATORS, DefaultLanguageHighlighterColors.KEYWORD),
             Map.entry(TokenGroup.COMMENTS, DefaultLanguageHighlighterColors.BLOCK_COMMENT),
             Map.entry(TokenGroup.SYMBOLS, DefaultLanguageHighlighterColors.COMMA),
-            Map.entry(TokenGroup.DATE_TIME, DefaultLanguageHighlighterColors.CLASS_NAME),
+            Map.entry(TokenGroup.DATE_TIME, DefaultLanguageHighlighterColors.CONSTANT),
             Map.entry(TokenGroup.GLOBAL_TYPES, DefaultLanguageHighlighterColors.GLOBAL_VARIABLE),
             Map.entry(TokenGroup.ASN_BAD_CHARACTER, HighlighterColors.BAD_CHARACTER)
     );
