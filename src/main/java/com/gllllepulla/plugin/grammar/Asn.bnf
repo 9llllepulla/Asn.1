@@ -44,7 +44,7 @@
         END = "END"
         DEFINITIONS = "DEFINITIONS"
         FROM = "FROM"
-        CLASS = "CLASS"
+        CLASS_DEF = "CLASS"
         TAGGED = "TAGGED"
         ANY = "ANY"
         CHOICE = "CHOICE"
@@ -56,6 +56,7 @@
         ENUMERATED = "ENUMERATED"
         WITH = "WITH"
         SYNTAX = "SYNTAX"
+        DATA = "DATA"
         /* universal type */
         INTEGER = "INTEGER"
         NULL = "NULL"
@@ -124,13 +125,15 @@
         DATE_TIME = "DATE-TIME"
         DURATION = "DURATION"
         /* Identifiers */
-        VALUE_REF = "regexp:[A-Z]([A-Za-z])*"
+        VALUE_REF = "regexp:[A-Z]([-A-Za-z0-9])*"
         VALUE_NAME = "regexp:\p{Ll}(-|\d|\p{Ll}|\p{Lu})*"
         VALUE_CLASS = "regexp:\p{Lu}(\p{Lu})*"
         /* Primitive */
         STR_LITERALS = "regexp:\"[^\"]*\""
-        NUMBER_INT = "regexp:[0-9]+"
-        NUMBER_FLOAT = "regexp:\d/.(\d)* "
+        NUMBER_INT = "regexp:-?[0-9]+"
+        NUMBER_FLOAT = "regexp:-?\d/.(\d)* "
+        TRUE = "TRUE"
+        FALSE = "FALSE"
         /* white space */
         NEW_LINE = "regexp:(\r|\n|\r\n)"
         WHITE_SPACE = "regexp:[\s\t\f\x0B]"
@@ -140,41 +143,62 @@
   generateTokenAccessors=true
 }
 program                         ::= NEW_LINE* file_header
-file_header                     ::= VALUE_REF DEFINITIONS IMPLICIT TAGS ASSIGMENT BEGIN exports_ imports_? constructs_ { pin=6 }
+file_header                     ::= VALUE_REF DEFINITIONS IMPLICIT TAGS ASSIGMENT BEGIN exports_ imports_? constructs_* END { pin=6 }
 /* elements */
 values_                         ::= VALUE_REF|VALUE_NAME
-int_round                       ::= LPAREN NUMBER_INT RPAREN { pin=1 }
+int_round                       ::= LPAREN NUMBER_INT RPAREN
 int_square                      ::= LBRACKET NUMBER_INT RBRACKET { pin=1 }
-range_                          ::= LPAREN NUMBER_INT DOUBLE_DOT NUMBER_INT RPAREN { pin=1 }
-size_range                      ::= LPAREN SIZE range_ RPAREN { pin=1 }
+range_                          ::= LPAREN NUMBER_INT DOUBLE_DOT NUMBER_INT RPAREN
+size_range                      ::= LPAREN SIZE (int_round|range_) RPAREN { pin=1 }
 integer_range                   ::= INTEGER range_
-primitive                       ::= INTEGER|BOOLEAN|REAL|NULL
+type_string                     ::= STRING_NUM|STRING_PR|STRING_TELE| STRING_VTEXT|STRING_VIS|STRING_IA5|STRING_GRAPH|STRING_BMP|STRING_GEN|STRING_UNI|STRING_UTF8|STRING_CHAR
+octet_                          ::= OCTET|BIT
+bool_                           ::= BOOLEAN DEFAULT? (TRUE|FALSE)?
+time_                           ::= TIME_UTC|TIME_GEN|TIME|TIME_OF_DAY|DATE|DATE_TIME|DURATION
+element_                        ::= (VALUE_REF|type_string_size|time_|integer_range|primitive_def|octet_string|bool_) OPTIONAL?
+primitive_def                   ::= INTEGER|REAL|NULL
+primitive_                      ::= STR_LITERALS|NUMBER_INT|NUMBER_FLOAT
 /* export & import */
-exports_                        ::= EXPORTS {(TAGGED|values_) COMMA}* (TAGGED|values_) SEMICOLON { pin=1 }
-imports_                        ::= IMPORTS from_* SEMICOLON { pin=1 }
+exports_                        ::= EXPORTS (TAGGED|values_) {COMMA (TAGGED|values_)}*  SEMICOLON { pin=1 }
+imports_                        ::= IMPORTS from_* SEMICOLON
 from_                           ::= (TAGGED|values_) {COMMA (TAGGED|values_)}* FROM VALUE_REF
 /* constructors */
-constructs_                     ::= value_assigment|tagged_assigment
-value_assigment                 ::= VALUE_REF ASSIGMENT (body_choice|body_enum|body_sequence) { pin=2 }
-/* bodies */
-body_choice                     ::= CHOICE LBRACE choice_element {COMMA choice_element}* RBRACE { pin=2 }
-choice_element                  ::= VALUE_NAME int_square (VALUE_REF|type_string|primitive)
-type_string                     ::= STRING_NUM|STRING_PR|STRING_TELE| STRING_VTEXT|STRING_VIS|STRING_IA5|STRING_GRAPH|
-                                    STRING_BMP|STRING_GEN|STRING_UNI|STRING_UTF8|STRING_CHAR size_range?
+constructs_                     ::= (simple_assigned|value_assigment|tagged_assigment) with_syntax?
+simple_assigned                 ::= VALUE_NAME (VALUE_REF|OID) ASSIGMENT primitive_
+value_assigment                 ::= (VALUE_REF|OID) ASSIGMENT (without_body|body_choice|body_enum|body_sequence) { pin=2 }
+tagged_assigment                ::= values_? TAGGED ASSIGMENT CLASS_DEF? body_tagged { pin=3 }
+with_syntax                     ::= WITH syntax_
+syntax_                         ::= SYNTAX LBRACE descriptor_* RBRACE { pin=2 }
+descriptor_                     ::= (OID|DATA) VAR (VALUE_NAME|VALUE_REF)
 
-body_enum                       ::= ENUMERATED LBRACE enum_element {COMMA enum_element}* RBRACE { pin=2 }
+type_string_size                ::= type_string size_range?
+octet_string                    ::= octet_ size_range
+/* no body */
+without_body                    ::= seq_of? element_
+seq_of                          ::= SEQUENCE OF
+/* bodies */
+body_choice                     ::= CHOICE LBRACE choice_def? {COMMA choice_def}* RBRACE { pin=2 }
+choice_def                      ::= choice_element seq_of? (element_|body_enum)
+choice_element                  ::= VALUE_NAME int_square?
+
+body_enum                       ::= ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL? { pin=2 }
 enum_element                    ::= VALUE_NAME int_round
 
-body_sequence                   ::= SEQUENCE LBRACE (variable_seq {COMMA variable_seq}*)|seq_of RBRACE { pin=2 }
-variable_seq                    ::= VALUE_NAME int_square? (VALUE_REF|type_string|integer_range) OPTIONAL?
-seq_of                          ::= SEQUENCE OF VALUE_REF { pin=2 }
+body_sequence                   ::= SEQUENCE LBRACE sequence_def? {COMMA sequence_def}* RBRACE { pin=2 }
+sequence_def                    ::= seq_of_value|variables_inner_construct|id_tagged
+seq_of_value                    ::= values_ seq_of VALUE_REF OPTIONAL?
+variables_inner_construct       ::= (choice_def|inner_construct)
+id_tagged                       ::= VALUE_NAME TAGGED DOT VAR values_ LPAREN singleton_body* RPAREN
 
-tagged_assigment                ::= values_ TAGGED ASSIGMENT body_tagged { pin=3 }
-
-body_tagged                     ::= LBRACE (variable_or|oid_) RBRACE
+body_tagged                     ::= LBRACE (variable_or|variables_|oid_|data_|seq_of_value|inner_construct)* RBRACE { pin=1 }
 variable_or                     ::= VALUE_NAME {OR VALUE_NAME}*
-oid_                            ::= OID LBRACE VALUE_NAME RBRACE
-
+oid_                            ::= OID (singleton_body|VALUE_NAME)
+data_                           ::= DATA seq_of? (VALUE_REF|body_choice)
+variables_                      ::= var_ {COMMA var_}*
+var_                            ::= VAR VALUE_NAME? VALUE_REF UNIQUE?
+/* inner construct */
+inner_construct                 ::= (choice_element|values_|DATA) (body_choice|body_enum)
+singleton_body                  ::= LBRACE (AT? VALUE_NAME|VALUE_REF) RBRACE
 
 
 
