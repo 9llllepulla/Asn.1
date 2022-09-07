@@ -23,3 +23,5 @@ out/
 
 *.flex
 /src/main/java/com/gllllepulla/plugin/grammar/Lang_Description.md
+idea-flex.skeleton
+jflex-1.7.0-2.jar
