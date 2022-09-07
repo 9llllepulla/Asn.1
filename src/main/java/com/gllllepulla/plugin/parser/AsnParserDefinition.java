@@ -44,7 +44,7 @@ public class AsnParserDefinition implements ParserDefinition {
     private static final TokenSet COMMENTS_TOKEN = TokenSet.create(COMMENT_LINE, COMMENT_HEADER, COMMENT_MULTILINE);
 
     public static final Map<TokenGroup, TokenSet> TOKEN_GROUPS = Map.ofEntries(
-            Map.entry(TokenGroup.UNI_TYPES, TokenSet.create(INTEGER, NULL, BOOLEAN, OID, OID_IRI, RELATIVE_OID, RELATIVE_OID_IRI, REAL, OPTIONAL, DEFAULT, UNIQUE, EOC)),
+            Map.entry(TokenGroup.UNI_TYPES, TokenSet.create(INTEGER, NULL, BOOLEAN, OID, /*OID_IRI, RELATIVE_OID, RELATIVE_OID_IRI,*/ REAL, OPTIONAL, DEFAULT, UNIQUE/*, EOC*/)),
             Map.entry(TokenGroup.BIT_STRINGS, TokenSet.create(BIT, OCTET)),
             Map.entry(TokenGroup.TYPE_STRINGS, TokenSet.create(STRING_BMP, STRING_CHAR, STRING_PR, STRING_GEN, STRING_GRAPH, STRING_IA5, STRING_NUM, STRING_UTF8,
                     STRING_UNI, STRING_VIS, STRING_TELE, STRING_VTEXT)),
@@ -53,10 +53,10 @@ public class AsnParserDefinition implements ParserDefinition {
             Map.entry(TokenGroup.SYMBOLS, TokenSet.create(COMMA, SEMICOLON, DOUBLE_DOT, DOT, OR, MINUS, AT, COLON, DOUBLE_QUOTE)),
             Map.entry(TokenGroup.COMMENTS, COMMENTS_TOKEN),
             Map.entry(TokenGroup.DATE_TIME, TokenSet.create(DURATION, DATE, DATE_TIME, TIME, TIME_GEN, TIME_OF_DAY, TIME_UTC)),
-            Map.entry(TokenGroup.IDENTIFIERS, TokenSet.create(VALUE_CLASS, VALUE_REF, VALUE_NAME)),
+            Map.entry(TokenGroup.IDENTIFIERS, TokenSet.create(USER_TYPE, TYPE_CLASS, VALUE_NAME)),
             Map.entry(TokenGroup.PRIMITIVES, TokenSet.create(STR_LITERALS, NUMBER_FLOAT, NUMBER_INT)),
             Map.entry(TokenGroup.GLOBAL_TYPES, TokenSet.create(UNIVERSAL, APPLICATION, CONTENT_SPECIFIC, PRIVATE)),
-            Map.entry(TokenGroup.CONSTRUCTS, TokenSet.create(SET, EXTERNAL, INSTANCE, SEQUENCE, OF, BEGIN, END, DEFINITIONS, FROM, CLASS_DEF, TAGGED, ANY,
+            Map.entry(TokenGroup.CONSTRUCTS, TokenSet.create(SET, EXTERNAL, INSTANCE, SEQUENCE, OF, BEGIN, END, DEFINITIONS, FROM, CLASS_DEF, /*TAGGED,*/ ANY,
                     CHOICE, IMPLICIT, EXPLICIT, SIZE, MAX, MIN, ENUMERATED, WITH, SYNTAX,
                     /* other */ TAGS, EXPORTS, IMPORTS, CONTAINING, TYPE_IDENTIFIER)),
             Map.entry(TokenGroup.ASN_BAD_CHARACTER, TokenSet.create(TokenType.BAD_CHARACTER)));
