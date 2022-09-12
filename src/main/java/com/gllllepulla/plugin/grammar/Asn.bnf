@@ -45,7 +45,6 @@
         DEFINITIONS = "DEFINITIONS"
         FROM = "FROM"
         CLASS_DEF = "CLASS"
-        //TAGGED = "TAGGED"
         CHOICE = "CHOICE"
         IMPLICIT = "IMPLICIT"
         EXPLICIT = "EXPLICIT"
@@ -55,21 +54,16 @@
         ENUMERATED = "ENUMERATED"
         WITH = "WITH"
         SYNTAX = "SYNTAX"
-        //DATA = "DATA"
         /* universal type */
         ANY = "ANY"
         INTEGER = "INTEGER"
         NULL = "NULL"
         BOOLEAN = "BOOLEAN"
         OID = "OID"
-        //RELATIVE_OID = "RELATIVE-OID"
-        //OID_IRI = "OID-IRI"
-        //RELATIVE_OID_IRI = "RELATIVE-OID-IRI"
         REAL = "REAL"
         OPTIONAL = "OPTIONAL"
         DEFAULT = "DEFAULT"
         UNIQUE = "UNIQUE"
-        //EOC = "EOC"
         /* Bit string */
         OCTET = "OCTET STRING"
         BIT = "BIT STRING"
@@ -137,7 +131,6 @@
         /* white space */
         NEW_LINE = "regexp:(\r|\n|\r\n)"
         WHITE_SPACE = "regexp:[\s\t\f\x0B]"
-        //EMPTY_ELEMENT = "regexp:\x05"
   ]
 
   generateTokenAccessors=true
