@@ -15,12 +15,15 @@
                 language="Asn.1"
                 extensions="asn"/>
         <lang.parserDefinition
-            language="Asn.1"
-            implementationClass="com.gllllepulla.plugin.parser.AsnParserDefinition"/>
+                language="Asn.1"
+                implementationClass="com.gllllepulla.plugin.parser.AsnParserDefinition"/>
         <lang.syntaxHighlighterFactory
-            language="Asn.1"
-            implementationClass="com.gllllepulla.plugin.highlighter.AsnSyntaxHighlighterFactory"/>
+                language="Asn.1"
+                implementationClass="com.gllllepulla.plugin.highlighter.AsnSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.gllllepulla.plugin.highlighter.AsnColorSettingsPage"/>
+        <lang.formatter
+                language="Asn.1"
+                implementationClass="com.gllllepulla.plugin.formatter.AsnFormattingModelBuilder"/>
     </extensions>
 
 </idea-plugin>
