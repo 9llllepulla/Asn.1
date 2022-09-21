@@ -135,7 +135,8 @@
 
   generateTokenAccessors=true
 }
-program                         ::= NEW_LINE* file_header
+program                         ::= property
+property                        ::= NEW_LINE* file_header
 file_header                     ::= (USER_TYPE|TYPE_CLASS) DEFINITIONS (IMPLICIT TAGS)? ASSIGMENT BEGIN exports_ imports_? constructs_* END { pin=4 }
 /* elements */
 values_                         ::= USER_TYPE|VALUE_NAME
