@@ -28,6 +28,9 @@
                 language="Asn.1"
                 implementationClass="com.gllllepulla.plugin.psi.structure.AsnStructureViewFactory"/>
         <navbar implementation="com.gllllepulla.plugin.psi.structure.AsnStructureAwareNavigationBar"/>
+        <codeStyleSettingsProvider implementation="com.gllllepulla.plugin.formatter.AsnCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider
+                implementation="com.gllllepulla.plugin.formatter.AsnLanguageCodeStyleSettingsProvider"/>
     </extensions>
 
 </idea-plugin>
