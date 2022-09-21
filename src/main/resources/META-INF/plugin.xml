@@ -24,6 +24,10 @@
         <lang.formatter
                 language="Asn.1"
                 implementationClass="com.gllllepulla.plugin.formatter.AsnFormattingModelBuilder"/>
+        <lang.psiStructureViewFactory
+                language="Asn.1"
+                implementationClass="com.gllllepulla.plugin.psi.structure.AsnStructureViewFactory"/>
+        <navbar implementation="com.gllllepulla.plugin.psi.structure.AsnStructureAwareNavigationBar"/>
     </extensions>
 
 </idea-plugin>
