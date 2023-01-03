@@ -25,22 +25,59 @@ import org.jetbrains.annotations.Nullable;
 public class AsnLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
 
     @Override
-    public @Nullable String getCodeSample(@NotNull SettingsType settingsType) {
-        return "Asn code sample";
-    }
-
-    @Override
     public @NotNull Language getLanguage() {
         return AsnLanguage.INSTANCE;
     }
 
     @Override
-    public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType) {
+    public void customizeSettings(@NotNull CodeStyleSettingsCustomizable customizable, @NotNull SettingsType settingsType) {
         if (settingsType == SettingsType.SPACING_SETTINGS) {
-            consumer.showStandardOptions("SPACE_AROUND_ASSIGNMENT_OPERATORS");
-            consumer.renameStandardOption("SPACE_AROUND_ASSIGNMENT_OPERATORS", "Some separator"); // TODO change it!
+            customizable.showStandardOptions("SPACE_AROUND_ASSIGNMENT_OPERATORS");
+            customizable.renameStandardOption("SPACE_AROUND_ASSIGNMENT_OPERATORS", "Separator");
         } else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
-            consumer.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");
+            customizable.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");
         }
+    }
+
+    @Override
+    public @Nullable String getCodeSample(@NotNull SettingsType settingsType) {
+        return "Traps DEFINITIONS IMPLICIT TAGS ::= BEGIN\n" +
+                "\n" +
+                "EXPORTS trapMessage;\n" +
+                "\n" +
+                "IMPORTS TAGGED,\n" +
+                "    sorm-message-trap FROM Classification,\n" +
+                "    MessageID FROM Sorm;\n" +
+                "\n" +
+                "trapMessage TAGGED ::= {\n" +
+                "    OID { sorm-message-trap }\n" +
+                "    DATA CHOICE {\n" +
+                "      trap [0]\tTrap,\t\t\t\t\t\t--- тип сообщения \"сигнал\"\n" +
+                "      trap-ack [1]\tTrapAck\t\t\t\t\t\t--- тип сообщения \"подтверждение сигнала\"\n" +
+                "    }\n" +
+                "}\n" +
+                "\n" +
+                "-- Блок данных сообщения типа \"сигнал\"\n" +
+                "Trap ::= SEQUENCE {\n" +
+                "  trap-type \t\tTrapType,\t\t\t-- тип сообщения\n" +
+                "  trap-message\t\tUTF8String (SIZE (1 .. 256)) OPTIONAL,\t-- описание сообщения\n" +
+                "  reference-message\tMessageID OPTIONAL\t\t-- номер сообщение к которому относится данный сигнал \n" +
+                "\t\t\t\t\t\t\t-- (например номер сообщения запросившего отчет при прерывании передачи)\n" +
+                "}\n" +
+                "\n" +
+                "TrapType ::= ENUMERATED {\n" +
+                "  heartbeat (0),\t\t\t\t-- тестовый пакет\n" +
+                "  restart-software (1),\t\t\t-- перезапуск ПО\n" +
+                "  unauthorized-access (2),\t\t\t-- попытка несанкционированного доступа\n" +
+                "  critical-error (3),\t\t\t\t-- критическая ошибка ПО, потеря данных, дальнейшая работа невозможна\n" +
+                "  major-error (4),\t\t\t\t-- серьезная ошибка ПО, потеря данных, но дальнейшая работа возможна\n" +
+                "  minor-error (5)\t\t\t\t-- незначительная ошибка ПО, данные не потеряны, дальнейшая работа возможна\n" +
+                "}\n" +
+                "\n" +
+                "-- Блок данных сообщения типа \"подтверждение сигнала\"\n" +
+                "-- Номер сообщения TrapAck должен соответствовать номеру сообщения Trap\n" +
+                "TrapAck ::= NULL\n" +
+                "\n" +
+                "END\n";
     }
 }

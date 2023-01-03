@@ -156,7 +156,7 @@ types_                          ::= TYPE_CLASS|USER_TYPE|OID
 /* export & import */
 exports_                        ::= EXPORTS (types_|values_) {COMMA (USER_TYPE|values_)}*  SEMICOLON { pin=1 }
 imports_                        ::= IMPORTS from_* SEMICOLON
-from_                           ::= (TYPE_CLASS|values_) {COMMA (TYPE_CLASS|values_)}* FROM USER_TYPE
+from_                           ::= (TYPE_CLASS|values_) {COMMA (TYPE_CLASS|values_)}* FROM USER_TYPE COMMA?
 /* constructors */
 constructs_                     ::= values_? (types_)? ASSIGMENT (primitive_|value_assigment) with_syntax? { pin=3 }
 value_assigment                 ::= CLASS_DEF? (without_body|body_choice|body_enum|body_sequence|body_tagged)
