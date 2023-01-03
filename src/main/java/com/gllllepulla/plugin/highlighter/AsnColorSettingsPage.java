@@ -16,7 +16,7 @@
 package com.gllllepulla.plugin.highlighter;
 
 import com.gllllepulla.plugin.AsnFileType;
-import com.gllllepulla.plugin.parser.AsnParserDefinition;
+import com.gllllepulla.plugin.parser.TokenGroup;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
@@ -34,7 +34,7 @@ import static com.gllllepulla.plugin.highlighter.AsnSyntaxHighlighter.OVERRIDDEN
 
 public class AsnColorSettingsPage implements ColorSettingsPage {
 
-    private static AttributesDescriptor[] descriptors;
+    private final AttributesDescriptor[] descriptors;
 
     public AsnColorSettingsPage() {
         descriptors = createAttributesDescriptors();
@@ -87,7 +87,7 @@ public class AsnColorSettingsPage implements ColorSettingsPage {
     private AttributesDescriptor[] createAttributesDescriptors() {
         return OVERRIDDEN_HIGHLIGHTERS.entrySet()
                 .parallelStream()
-                .filter(entry -> !entry.getKey().equals(AsnParserDefinition.TokenGroup.ASN_BAD_CHARACTER))
+                .filter(entry -> !entry.getKey().equals(TokenGroup.ASN_BAD_CHARACTER))
                 .map(entry -> new AttributesDescriptor(entry.getKey().getDescription(), entry.getValue()))
                 .toArray(AttributesDescriptor[]::new);
     }

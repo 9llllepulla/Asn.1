@@ -113,29 +113,4 @@ public class AsnParserDefinition implements ParserDefinition {
         return AsnTypes.Factory.createElement(node);
     }
 
-    public enum TokenGroup {
-        UNI_TYPES("Universal type"),
-        BIT_STRINGS("Bit string"),
-        TYPE_STRINGS("Type string"),
-        BRACKETS("Brackets"),
-        OPERATORS("Operator"),
-        SYMBOLS("Symbol"),
-        COMMENTS("Comment"),
-        DATE_TIME("Date and Time"),
-        IDENTIFIERS("Identifier"),
-        PRIMITIVES("Primitive"),
-        GLOBAL_TYPES("Global type"),
-        CONSTRUCTS("Construct definition"),
-        ASN_BAD_CHARACTER("ASN_BAD_CHARACTER");
-
-        private final String description;
-
-        TokenGroup(String description) {
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-    }
 }
