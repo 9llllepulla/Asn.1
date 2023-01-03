@@ -22,6 +22,16 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Базовый класс для реализации PSI.
+ * <p>
+ * PSI, или Program Structure Interface, дерево строится поверх AST,
+ * добавляя семантику и методы для управления конкретными языковыми конструкциями.
+ * Узлы дерева PSI представлены классами, реализующими интерфейс PsiElement,
+ * и создаются плагином языка в методе ParserDefinition.createElement().
+ * Узел верхнего уровня дерева PSI для файла должен реализовывать интерфейс PsiFile
+ * и создается в методе ParserDefinition.createFile().
+ */
 public class AsnFile extends PsiFileBase {
 
     public AsnFile(@NotNull FileViewProvider viewProvider) {
