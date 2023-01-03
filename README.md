@@ -6,8 +6,9 @@
 
 ## ToDo list
 - [x] Create a new [IntelliJ Platform Plugin][template] project.
+- [x] Add syntax highlighter
+- [x] Add Color Setting Page
 - [ ] Add code formatter
-- [ ] 
 
 <!-- Plugin description -->
 This *asn files syntax support plugin
