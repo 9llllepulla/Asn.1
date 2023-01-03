@@ -18,14 +18,12 @@ package com.gllllepulla.plugin.formatter;
 import com.gllllepulla.plugin.AsnLanguage;
 import com.gllllepulla.plugin.psi.AsnTypes;
 import com.intellij.formatting.*;
-import com.intellij.lang.Language;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 
 public class AsnFormattingModelBuilder implements FormattingModelBuilder {
 
     private CodeStyleSettings codeStyleSettings;
-    private final Language asnInstance = AsnLanguage.INSTANCE;
 
     @NotNull
     @Override
@@ -36,15 +34,21 @@ public class AsnFormattingModelBuilder implements FormattingModelBuilder {
     }
 
     private SpacingBuilder createSpaceBuilder() {
-        return new SpacingBuilder(codeStyleSettings, asnInstance)
+        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
                 .append(comment())
                 .append(numberingRule())
                 .append(valuesRule())
-                .append(typeStringRule());
+                .append(typeStringRule())
+                .append(constructRule());
+    }
+
+    private SpacingBuilder constructRule() {
+        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
+                .betweenInside(AsnTypes.LBRACE, AsnTypes.RBRACE, AsnTypes.BODY_SEQUENCE).none();
     }
 
     private SpacingBuilder valuesRule() {
-        return new SpacingBuilder(codeStyleSettings, asnInstance)
+        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
                 .before(AsnTypes.VALUE_NAME).spaces(1)
                 .after(AsnTypes.VALUE_NAME).spaces(1)
                 .before(AsnTypes.USER_TYPE).spaces(1)
@@ -57,14 +61,14 @@ public class AsnFormattingModelBuilder implements FormattingModelBuilder {
     }
 
     private SpacingBuilder numberingRule() {
-        return new SpacingBuilder(codeStyleSettings, asnInstance)
+        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
                 .around(AsnTypes.INT_ROUND).spaces(1)
                 .around(AsnTypes.INT_SQUARE).spaces(1)
                 .around(AsnTypes.SIZE_RANGE).spaces(1);
     }
 
     private SpacingBuilder comment() {
-        return new SpacingBuilder(codeStyleSettings, asnInstance)
+        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
                 .before(AsnTypes.COMMENT_LINE).spaces(5);
     }
 }

@@ -40,6 +40,7 @@ public class AsnCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
         return "Asn";
     }
 
+    @Override
     @NotNull
     public CodeStyleConfigurable createConfigurable(@NotNull CodeStyleSettings settings, @NotNull CodeStyleSettings modelSettings) {
         return new CodeStyleAbstractConfigurable(settings, modelSettings, this.getConfigurableDisplayName()) {

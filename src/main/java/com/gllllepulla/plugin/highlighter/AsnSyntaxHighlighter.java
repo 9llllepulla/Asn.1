@@ -17,6 +17,7 @@ package com.gllllepulla.plugin.highlighter;
 
 import com.gllllepulla.plugin.lexer.AsnLexerAdapter;
 import com.gllllepulla.plugin.parser.AsnParserDefinition;
+import com.gllllepulla.plugin.parser.TokenGroup;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.HighlighterColors;
@@ -30,7 +31,6 @@ import java.util.Map;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 import static java.util.stream.Collectors.toMap;
-import static com.gllllepulla.plugin.parser.AsnParserDefinition.*;
 
 public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
 
@@ -50,12 +50,10 @@ public class AsnSyntaxHighlighter extends SyntaxHighlighterBase {
             Map.entry(TokenGroup.ASN_BAD_CHARACTER, HighlighterColors.BAD_CHARACTER)
     );
 
-    private static Map<TokenSet, TextAttributesKey[]> asnDefinitions;
+    private final Map<TokenSet, TextAttributesKey[]> asnDefinitions;
 
     public AsnSyntaxHighlighter() {
-        if (asnDefinitions == null) {
-            asnDefinitions = createAsnDefinitions();
-        }
+        asnDefinitions = createAsnDefinitions();
     }
 
     @NotNull
