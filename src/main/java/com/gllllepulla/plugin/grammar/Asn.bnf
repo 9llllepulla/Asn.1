@@ -161,8 +161,7 @@ from_                           ::= (TYPE_CLASS|values_) {COMMA (TYPE_CLASS|valu
 constructs_                     ::= values_? (types_)? ASSIGMENT (primitive_|value_assigment) with_syntax? { pin=3 }
 value_assigment                 ::= CLASS_DEF? (without_body|body_choice|body_enum|body_sequence|body_tagged)
 
-with_syntax                     ::= WITH syntax_
-syntax_                         ::= SYNTAX LBRACE descriptor_* RBRACE { pin=2 }
+with_syntax                     ::= WITH SYNTAX LBRACE descriptor_* RBRACE { pin=2 }
 descriptor_                     ::= types_ VAR (VALUE_NAME|USER_TYPE)
 
 type_string_size                ::= type_string size_range?
