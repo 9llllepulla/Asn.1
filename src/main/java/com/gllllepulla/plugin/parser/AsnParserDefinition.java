@@ -27,14 +27,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-
-import static com.gllllepulla.plugin.psi.AsnTypes.*;
+import static com.gllllepulla.plugin.AsnFileType.ASN_TOKEN_INSTANCE;
 
 /**
  * Плагин языка предоставляет реализацию синтаксического анализатора как реализацию интерфейса PsiParser,
@@ -49,27 +46,6 @@ public class AsnParserDefinition implements ParserDefinition {
 
     public static final IFileElementType FILE = new IFileElementType(AsnLanguage.INSTANCE);
 
-    private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    private static final TokenSet COMMENTS_TOKEN = TokenSet.create(COMMENT_LINE, COMMENT_HEADER, COMMENT_MULTILINE);
-
-    public static final Map<TokenGroup, TokenSet> TOKEN_GROUPS = Map.ofEntries(
-            Map.entry(TokenGroup.UNI_TYPES, TokenSet.create(INTEGER, NULL, BOOLEAN, OID, REAL, OPTIONAL, DEFAULT, UNIQUE)),
-            Map.entry(TokenGroup.BIT_STRINGS, TokenSet.create(BIT, OCTET)),
-            Map.entry(TokenGroup.TYPE_STRINGS, TokenSet.create(STRING_BMP, STRING_CHAR, STRING_PR, STRING_GEN, STRING_GRAPH, STRING_IA5, STRING_NUM, STRING_UTF8,
-                    STRING_UNI, STRING_VIS, STRING_TELE, STRING_VTEXT)),
-            Map.entry(TokenGroup.BRACKETS, TokenSet.create(LPAREN, RPAREN, LBRACKET, RBRACKET)),
-            Map.entry(TokenGroup.OPERATORS, TokenSet.create(VAR, ASSIGMENT)),
-            Map.entry(TokenGroup.SYMBOLS, TokenSet.create(COMMA, SEMICOLON, DOUBLE_DOT, DOT, OR, MINUS, AT, COLON, DOUBLE_QUOTE)),
-            Map.entry(TokenGroup.COMMENTS, COMMENTS_TOKEN),
-            Map.entry(TokenGroup.DATE_TIME, TokenSet.create(DURATION, DATE, DATE_TIME, TIME, TIME_GEN, TIME_OF_DAY, TIME_UTC)),
-            Map.entry(TokenGroup.IDENTIFIERS, TokenSet.create(USER_TYPE, TYPE_CLASS, VALUE_NAME)),
-            Map.entry(TokenGroup.PRIMITIVES, TokenSet.create(STR_LITERALS, NUMBER_FLOAT, NUMBER_INT)),
-            Map.entry(TokenGroup.GLOBAL_TYPES, TokenSet.create(UNIVERSAL, APPLICATION, CONTENT_SPECIFIC, PRIVATE)),
-            Map.entry(TokenGroup.CONSTRUCTS, TokenSet.create(SET, EXTERNAL, INSTANCE, SEQUENCE, OF, BEGIN, END, DEFINITIONS, FROM, CLASS_DEF, ANY,
-                    CHOICE, IMPLICIT, EXPLICIT, SIZE, MAX, MIN, ENUMERATED, WITH, SYNTAX,
-                    /* other */ TAGS, EXPORTS, IMPORTS, CONTAINING, TYPE_IDENTIFIER)),
-            Map.entry(TokenGroup.ASN_BAD_CHARACTER, TokenSet.create(TokenType.BAD_CHARACTER)));
-
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
@@ -79,12 +55,12 @@ public class AsnParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public TokenSet getWhitespaceTokens() {
-        return WHITE_SPACES;
+        return ASN_TOKEN_INSTANCE.getWhiteSpaceTokens();
     }
 
     @Override
     public @NotNull TokenSet getCommentTokens() {
-        return COMMENTS_TOKEN;
+        return ASN_TOKEN_INSTANCE.getCommentTokens();
     }
 
     @Override

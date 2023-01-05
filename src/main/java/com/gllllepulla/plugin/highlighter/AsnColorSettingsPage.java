@@ -16,7 +16,6 @@
 package com.gllllepulla.plugin.highlighter;
 
 import com.gllllepulla.plugin.AsnFileType;
-import com.gllllepulla.plugin.parser.TokenGroup;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
@@ -30,15 +29,11 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.Map;
 
-import static com.gllllepulla.plugin.highlighter.AsnSyntaxHighlighter.OVERRIDDEN_HIGHLIGHTERS;
+import static com.gllllepulla.plugin.AsnFileType.ASN_TOKEN_INSTANCE;
 
 public class AsnColorSettingsPage implements ColorSettingsPage {
 
-    private final AttributesDescriptor[] descriptors;
-
-    public AsnColorSettingsPage() {
-        descriptors = createAttributesDescriptors();
-    }
+    private static final AttributesDescriptor[] DESCRIPTORS = ASN_TOKEN_INSTANCE.createTokensHighlighterDescriptors();
 
     @Nullable
     @Override
@@ -71,7 +66,7 @@ public class AsnColorSettingsPage implements ColorSettingsPage {
 
     @Override
     public AttributesDescriptor @NotNull [] getAttributeDescriptors() {
-        return descriptors;
+        return DESCRIPTORS;
     }
 
     @Override
@@ -84,11 +79,4 @@ public class AsnColorSettingsPage implements ColorSettingsPage {
         return "Asn.1";
     }
 
-    private AttributesDescriptor[] createAttributesDescriptors() {
-        return OVERRIDDEN_HIGHLIGHTERS.entrySet()
-                .parallelStream()
-                .filter(entry -> !entry.getKey().equals(TokenGroup.ASN_BAD_CHARACTER))
-                .map(entry -> new AttributesDescriptor(entry.getKey().getDescription(), entry.getValue()))
-                .toArray(AttributesDescriptor[]::new);
-    }
 }

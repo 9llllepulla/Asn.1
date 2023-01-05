@@ -16,6 +16,7 @@
 
 package com.gllllepulla.plugin;
 
+import com.gllllepulla.plugin.psi.token.AsnToken;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,7 @@ public class AsnFileType extends LanguageFileType {
 
     public static final LanguageFileType INSTANCE = new AsnFileType();
     public static final Icon ICON_FILE = IconLoader.getIcon("META-INF/pluginIcon.svg", AsnFileType.class);
+    public static final AsnToken ASN_TOKEN_INSTANCE = AsnToken.getInstance();
 
     private AsnFileType() {
         super(AsnLanguage.INSTANCE);
