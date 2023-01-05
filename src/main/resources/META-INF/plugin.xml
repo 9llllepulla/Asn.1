@@ -20,7 +20,8 @@
         <lang.syntaxHighlighterFactory
                 language="Asn.1"
                 implementationClass="com.gllllepulla.plugin.highlighter.AsnSyntaxHighlighterFactory"/>
-        <colorSettingsPage implementation="com.gllllepulla.plugin.highlighter.AsnColorSettingsPage"/>
+        <colorSettingsPage
+                implementation="com.gllllepulla.plugin.highlighter.AsnColorSettingsPage"/>
         <lang.formatter
                 language="Asn.1"
                 implementationClass="com.gllllepulla.plugin.formatter.AsnFormattingModelBuilder"/>

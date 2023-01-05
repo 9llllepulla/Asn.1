@@ -26,7 +26,7 @@
 
   elementTypeHolderClass="com.gllllepulla.plugin.psi.AsnTypes"
   elementTypeClass="com.gllllepulla.plugin.psi.AsnElementType"
-  tokenTypeClass="com.gllllepulla.plugin.psi.AsnTokenType"
+  tokenTypeClass="com.gllllepulla.plugin.psi.token.AsnTokenType"
 
   tokens = [
         /* Global type */
