@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-package com.gllllepulla.plugin.parser;
+package com.gllllepulla.plugin.psi.token;
 
-public enum TokenGroup {
+enum TokenGroup {
     UNI_TYPES("Universal type"),
     BIT_STRINGS("Bit string"),
     TYPE_STRINGS("Type string"),
@@ -27,8 +27,9 @@ public enum TokenGroup {
     IDENTIFIERS("Identifier"),
     PRIMITIVES("Primitive"),
     GLOBAL_TYPES("Global type"),
-    CONSTRUCTS("Construct definition"),
-    ASN_BAD_CHARACTER("ASN_BAD_CHARACTER");
+    EXPRESSIONS("Construct definition"),
+    ASN_BAD_CHARACTER("ASN_BAD_CHARACTER"),
+    WHITE_SPACE_TYPES("Whitespaces");
 
     private final String description;
 
@@ -36,7 +37,7 @@ public enum TokenGroup {
         this.description = description;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 }
