@@ -21,6 +21,8 @@ import com.intellij.formatting.*;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 
+import static com.gllllepulla.plugin.AsnFileType.ASN_TOKEN_INSTANCE;
+
 public class AsnFormattingModelBuilder implements FormattingModelBuilder {
 
     private CodeStyleSettings codeStyleSettings;
@@ -39,12 +41,12 @@ public class AsnFormattingModelBuilder implements FormattingModelBuilder {
                 .append(numberingRule())
                 .append(valuesRule())
                 .append(typeStringRule())
-                .append(constructRule());
+                .append(expressionRule());
     }
 
-    private SpacingBuilder constructRule() {
+    private SpacingBuilder expressionRule() {
         return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .betweenInside(AsnTypes.LBRACE, AsnTypes.RBRACE, AsnTypes.BODY_SEQUENCE).none();
+                .betweenInside(AsnTypes.LBRACE, AsnTypes.RBRACE, AsnTypes.EXPR_).none();
     }
 
     private SpacingBuilder valuesRule() {
@@ -69,6 +71,6 @@ public class AsnFormattingModelBuilder implements FormattingModelBuilder {
 
     private SpacingBuilder comment() {
         return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .before(AsnTypes.COMMENT_LINE).spaces(5);
+                .before(ASN_TOKEN_INSTANCE.getCommentTokens()).spaces(3);
     }
 }
