@@ -16,18 +16,20 @@
 package com.gllllepulla.plugin.psi.token;
 
 enum TokenGroup {
-    UNI_TYPES("Universal type"),
-    BIT_STRINGS("Bit string"),
-    TYPE_STRINGS("Type string"),
+    UNI_TYPES("Universal types"),
+    BIT_STRINGS("Bit strings"),
+    TYPE_STRINGS("Type strings"),
+    BRACES("Braces"),
     BRACKETS("Brackets"),
-    OPERATORS("Operator"),
-    SYMBOLS("Symbol"),
-    COMMENTS("Comment"),
+    OPERATORS("Operators"),
+    SYMBOLS("Symbols"),
+    BLOCK_COMMENT("Block comment"),
+    LIME_COMMENT("Line comment"),
     DATE_TIME("Date and Time"),
-    IDENTIFIERS("Identifier"),
-    PRIMITIVES("Primitive"),
-    GLOBAL_TYPES("Global type"),
-    EXPRESSIONS("Construct definition"),
+    IDENTIFIERS("Identifiers"),
+    PRIMITIVES("Primitives"),
+    GLOBAL_TYPES("Global types"),
+    KEYWORDS("Keywords"),
     ASN_BAD_CHARACTER("ASN_BAD_CHARACTER"),
     WHITE_SPACE_TYPES("Whitespaces");
 
