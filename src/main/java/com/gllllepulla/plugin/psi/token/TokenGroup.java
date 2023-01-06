@@ -24,7 +24,7 @@ enum TokenGroup {
     OPERATORS("Operators"),
     SYMBOLS("Symbols"),
     BLOCK_COMMENT("Block comment"),
-    LIME_COMMENT("Line comment"),
+    LINE_COMMENT("Line comment"),
     DATE_TIME("Date and Time"),
     IDENTIFIERS("Identifiers"),
     PRIMITIVES("Primitives"),
