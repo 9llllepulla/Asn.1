@@ -144,11 +144,10 @@ int_round                       ::= LPAREN NUMBER_INT RPAREN
 int_square                      ::= LBRACKET NUMBER_INT RBRACKET { pin=1 }
 range_                          ::= INTEGER? LPAREN NUMBER_INT DOUBLE_DOT NUMBER_INT RPAREN
 size_range                      ::= LPAREN SIZE (int_round|range_) RPAREN { pin=1 }
-type_string                     ::= STRING_NUM|STRING_PR|STRING_TELE| STRING_VTEXT|STRING_VIS|STRING_IA5|STRING_GRAPH|STRING_BMP|STRING_GEN|STRING_UNI|STRING_UTF8|STRING_CHAR
 bool_                           ::= BOOLEAN DEFAULT? (TRUE|FALSE)?
 time_                           ::= TIME_UTC|TIME_GEN|TIME|TIME_OF_DAY|DATE|DATE_TIME|DURATION
 element_                        ::= (USER_TYPE|type_string_size|time_|range_|primitive_def|octet_string|bool_) OPTIONAL?
-type_string_size                ::= type_string size_range?
+type_string_size                ::= (STRING_NUM|STRING_PR|STRING_TELE| STRING_VTEXT|STRING_VIS|STRING_IA5|STRING_GRAPH|STRING_BMP|STRING_GEN|STRING_UNI|STRING_UTF8|STRING_CHAR) size_range?
 octet_string                    ::= (OCTET|BIT) size_range
 primitive_def                   ::= INTEGER|REAL|NULL
 primitive_                      ::= STR_LITERALS|NUMBER_INT|NUMBER_FLOAT
