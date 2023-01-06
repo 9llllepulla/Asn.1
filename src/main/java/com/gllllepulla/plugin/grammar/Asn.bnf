@@ -164,7 +164,7 @@ body_choice_expr                ::= values_? (types_)? ASSIGMENT CLASS_DEF? CHOI
 body_enum_expr                  ::= values_? (types_)? ASSIGMENT CLASS_DEF? ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL? with_syntax_expr? { pin=6 }
 body_sequence_expr              ::= values_? (types_)? ASSIGMENT CLASS_DEF? SEQUENCE LBRACE sequence_def? {COMMA sequence_def}* RBRACE with_syntax_expr? { pin=6 }
 body_tagged_expr                ::= values_? (types_)? ASSIGMENT CLASS_DEF? LBRACE (variable_or|variables_|oid_|data_|seq_of_value|inner_construct)* RBRACE with_syntax_expr? { pin=5 }
-with_syntax_expr                ::= WITH SYNTAX LBRACE descriptor_* RBRACE { pin=2 }
+with_syntax_expr                ::= WITH SYNTAX LBRACE {types_ VAR (VALUE_NAME|USER_TYPE)}* RBRACE { pin=2 }
 
 variable_or                     ::= VALUE_NAME {OR VALUE_NAME}*
 variables_                      ::= var_ {COMMA var_}*
@@ -172,7 +172,6 @@ var_                            ::= VAR values_? USER_TYPE? UNIQUE?
 oid_                            ::= OID (singleton_body|VALUE_NAME)
 data_                           ::= TYPE_CLASS seq_of? (USER_TYPE|body_choice)
 body_choice                     ::= CHOICE LBRACE choice_def? {COMMA choice_def}* RBRACE { pin=2 }
-descriptor_                     ::= types_ VAR (VALUE_NAME|USER_TYPE)
 seq_of                          ::= SEQUENCE OF
 sequence_def                    ::= seq_of_value|variables_inner_construct|id_tagged
 seq_of_value                    ::= values_ seq_of USER_TYPE OPTIONAL?
