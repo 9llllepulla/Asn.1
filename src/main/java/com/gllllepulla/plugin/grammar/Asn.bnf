@@ -153,7 +153,7 @@ primitive_def                   ::= INTEGER|REAL|NULL
 primitive_                      ::= STR_LITERALS|NUMBER_INT|NUMBER_FLOAT
 types_                          ::= TYPE_CLASS|USER_TYPE|OID
 /* export & import */
-exports_                        ::= EXPORTS (types_|values_) {COMMA (USER_TYPE|values_)}* SEMICOLON { pin=1 }
+exports_                        ::= EXPORTS (types_|values_) {COMMA values_}* SEMICOLON { pin=1 }
 imports_                        ::= IMPORTS from_* SEMICOLON
 from_                           ::= (TYPE_CLASS|values_) {COMMA (TYPE_CLASS|values_)}* FROM USER_TYPE COMMA?
 /* expressions */
@@ -164,11 +164,11 @@ body_choice_expr                ::= values_? (types_)? ASSIGMENT CLASS_DEF? CHOI
 body_enum_expr                  ::= values_? (types_)? ASSIGMENT CLASS_DEF? ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL? with_syntax_expr? { pin=6 }
 body_sequence_expr              ::= values_? (types_)? ASSIGMENT CLASS_DEF? SEQUENCE LBRACE sequence_def? {COMMA sequence_def}* RBRACE with_syntax_expr? { pin=6 }
 body_tagged_expr                ::= values_? (types_)? ASSIGMENT CLASS_DEF? LBRACE (variable_or|variables_|oid_|data_|seq_of_value|inner_construct)* RBRACE with_syntax_expr? { pin=5 }
-with_syntax_expr                ::= WITH SYNTAX LBRACE {types_ VAR (VALUE_NAME|USER_TYPE)}* RBRACE { pin=2 }
+with_syntax_expr                ::= WITH SYNTAX LBRACE {types_ VAR (VALUE_NAME|USER_TYPE)}* RBRACE { pin=3 }
 
 variable_or                     ::= VALUE_NAME {OR VALUE_NAME}*
 variables_                      ::= var_ {COMMA var_}*
-var_                            ::= VAR values_? USER_TYPE? UNIQUE?
+var_                            ::= VAR values_? UNIQUE?
 oid_                            ::= OID (singleton_body|VALUE_NAME)
 data_                           ::= TYPE_CLASS seq_of? (USER_TYPE|body_choice)
 body_choice                     ::= CHOICE LBRACE choice_def? {COMMA choice_def}* RBRACE { pin=2 }
