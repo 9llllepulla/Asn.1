@@ -168,7 +168,7 @@ with_syntax_expr                ::= WITH SYNTAX LBRACE {types_ VAR (VALUE_NAME|U
 
 variable_or                     ::= VALUE_NAME {OR VALUE_NAME}*
 variables_                      ::= var_ {COMMA var_}*
-var_                            ::= VAR values_? UNIQUE?
+var_                            ::= VAR values_ USER_TYPE? UNIQUE?
 oid_                            ::= OID (singleton_body|VALUE_NAME)
 data_                           ::= TYPE_CLASS seq_of? (USER_TYPE|body_choice)
 body_choice                     ::= CHOICE LBRACE choice_def? {COMMA choice_def}* RBRACE { pin=2 }
