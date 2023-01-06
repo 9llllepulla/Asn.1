@@ -154,8 +154,8 @@ primitive_                      ::= STR_LITERALS|NUMBER_INT|NUMBER_FLOAT
 types_                          ::= TYPE_CLASS|USER_TYPE|OID
 /* export & import */
 exports_                        ::= EXPORTS (types_|values_) {COMMA values_}* SEMICOLON { pin=1 }
-imports_                        ::= IMPORTS from_* SEMICOLON
-from_                           ::= (TYPE_CLASS|values_) {COMMA (TYPE_CLASS|values_)}* FROM USER_TYPE COMMA?
+imports_                        ::= IMPORTS from_* SEMICOLON { pin=1 }
+from_                           ::= (TYPE_CLASS|values_) {COMMA (TYPE_CLASS|values_)}* FROM USER_TYPE
 /* expressions */
 expr_                           ::= (primitive_expr|without_body_expr|body_choice_expr|body_enum_expr|body_sequence_expr|body_tagged_expr)
 primitive_expr                  ::= values_? (types_)? ASSIGMENT primitive_ with_syntax_expr?
