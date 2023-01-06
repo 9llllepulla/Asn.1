@@ -135,58 +135,51 @@
 
   generateTokenAccessors=true
 }
-program                         ::= property
-property                        ::= NEW_LINE* file_header
-file_header                     ::= (USER_TYPE|TYPE_CLASS) DEFINITIONS (IMPLICIT TAGS)? ASSIGMENT BEGIN exports_ imports_? expr_* END { pin=4 }
+program                  ::= property
+property                 ::= NEW_LINE* file_header
+file_header              ::= (USER_TYPE|TYPE_CLASS) DEFINITIONS (IMPLICIT TAGS)? ASSIGMENT BEGIN exports_ imports_? expr_* END { pin=4 }
 /* elements */
-values_                         ::= USER_TYPE|VALUE_NAME
-int_round                       ::= LPAREN NUMBER_INT RPAREN
-int_square                      ::= LBRACKET NUMBER_INT RBRACKET { pin=1 }
-range_                          ::= INTEGER? LPAREN NUMBER_INT DOUBLE_DOT NUMBER_INT RPAREN
-size_range                      ::= LPAREN SIZE (int_round|range_) RPAREN { pin=1 }
-type_string                     ::= STRING_NUM|STRING_PR|STRING_TELE| STRING_VTEXT|STRING_VIS|STRING_IA5|STRING_GRAPH|STRING_BMP|STRING_GEN|STRING_UNI|STRING_UTF8|STRING_CHAR
-bool_                           ::= BOOLEAN DEFAULT? (TRUE|FALSE)?
-time_                           ::= TIME_UTC|TIME_GEN|TIME|TIME_OF_DAY|DATE|DATE_TIME|DURATION
-element_                        ::= (USER_TYPE|type_string_size|time_|range_|primitive_def|octet_string|bool_) OPTIONAL?
-type_string_size                ::= type_string size_range?
-octet_string                    ::= (OCTET|BIT) size_range
-primitive_def                   ::= INTEGER|REAL|NULL
-primitive_                      ::= STR_LITERALS|NUMBER_INT|NUMBER_FLOAT
-types_                          ::= TYPE_CLASS|USER_TYPE|OID
+values_                  ::= USER_TYPE|VALUE_NAME
+values_or                ::= VALUE_NAME {OR VALUE_NAME}*
+int_square               ::= LBRACKET NUMBER_INT RBRACKET { pin=1 }
+range_                   ::= INTEGER? LPAREN NUMBER_INT int_range_expr? RPAREN
+int_range_expr           ::= DOUBLE_DOT NUMBER_INT { pin=1 }
+size_range               ::= LPAREN SIZE range_ RPAREN { pin=1 }
+bool_                    ::= BOOLEAN DEFAULT? (TRUE|FALSE)?
+time_                    ::= TIME_UTC|TIME_GEN|TIME|TIME_OF_DAY|DATE|DATE_TIME|DURATION
+element_                 ::= (USER_TYPE|type_string_size|time_|range_|primitive_def|octet_string|bool_) OPTIONAL?
+type_string_size         ::= (STRING_NUM|STRING_PR|STRING_TELE|STRING_VTEXT|STRING_VIS|STRING_IA5|STRING_GRAPH|STRING_BMP|STRING_GEN|STRING_UNI|STRING_UTF8|STRING_CHAR) size_range?
+octet_string             ::= (OCTET|BIT) size_range
+primitive_def            ::= INTEGER|REAL|NULL
+types_                   ::= TYPE_CLASS|USER_TYPE|OID
+seq_of                   ::= SEQUENCE OF
+var_                     ::= VAR values_ USER_TYPE? UNIQUE?
+variables_               ::= var_ {COMMA var_}*
+enum_element             ::= VALUE_NAME LPAREN NUMBER_INT RPAREN { pin=2 }
+seq_of_value             ::= values_ seq_of USER_TYPE OPTIONAL?
 /* export & import */
-exports_                        ::= EXPORTS (types_|values_) {COMMA (USER_TYPE|values_)}* SEMICOLON { pin=1 }
-imports_                        ::= IMPORTS from_* SEMICOLON
-from_                           ::= (TYPE_CLASS|values_) {COMMA (TYPE_CLASS|values_)}* FROM USER_TYPE COMMA?
+exports_                 ::= EXPORTS (types_|values_) {COMMA values_}* SEMICOLON { pin=1 }
+imports_                 ::= IMPORTS from_* SEMICOLON { pin=1 }
+from_                    ::= (TYPE_CLASS|values_) {COMMA (TYPE_CLASS|values_)}* FROM USER_TYPE
 /* expressions */
-expr_                           ::= (primitive_expr|without_body_expr|body_choice_expr|body_enum_expr|body_sequence_expr|body_tagged_expr)
-primitive_expr                  ::= values_? (types_)? ASSIGMENT primitive_ with_syntax_expr?
-without_body_expr               ::= values_? (types_)? ASSIGMENT CLASS_DEF? seq_of? element_
-body_choice_expr                ::= values_? (types_)? ASSIGMENT CLASS_DEF? CHOICE LBRACE choice_def? {COMMA choice_def}* RBRACE with_syntax_expr? { pin=6 }
-body_enum_expr                  ::= values_? (types_)? ASSIGMENT CLASS_DEF? ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL? with_syntax_expr? { pin=6 }
-body_sequence_expr              ::= values_? (types_)? ASSIGMENT CLASS_DEF? SEQUENCE LBRACE sequence_def? {COMMA sequence_def}* RBRACE with_syntax_expr? { pin=6 }
-body_tagged_expr                ::= values_? (types_)? ASSIGMENT CLASS_DEF? LBRACE (variable_or|variables_|oid_|data_|seq_of_value|inner_construct)* RBRACE with_syntax_expr? { pin=5 }
-with_syntax_expr                ::= WITH SYNTAX LBRACE descriptor_* RBRACE { pin=2 }
-
-variable_or                     ::= VALUE_NAME {OR VALUE_NAME}*
-variables_                      ::= var_ {COMMA var_}*
-var_                            ::= VAR values_? USER_TYPE? UNIQUE?
-oid_                            ::= OID (singleton_body|VALUE_NAME)
-data_                           ::= TYPE_CLASS seq_of? (USER_TYPE|body_choice)
-body_choice                     ::= CHOICE LBRACE choice_def? {COMMA choice_def}* RBRACE { pin=2 }
-descriptor_                     ::= types_ VAR (VALUE_NAME|USER_TYPE)
-seq_of                          ::= SEQUENCE OF
-sequence_def                    ::= seq_of_value|variables_inner_construct|id_tagged
-seq_of_value                    ::= values_ seq_of USER_TYPE OPTIONAL?
-variables_inner_construct       ::= (choice_def|inner_construct)
-
-id_tagged                       ::= VALUE_NAME TYPE_CLASS DOT VAR values_ LPAREN singleton_body* RPAREN
-singleton_body                  ::= LBRACE AT? (types_|VALUE_NAME) RBRACE
-choice_def                      ::= VALUE_NAME int_square? (seq_of|IMPLICIT|EXPLICIT)? (element_|body_enum)
-body_enum                       ::= ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL? { pin=2 }
-enum_element                    ::= VALUE_NAME int_round
-/* inner construct */
-inner_construct                 ::= (inner_construct_choice_expr|inner_construct_enum_expr)
-inner_construct_choice_expr     ::= (VALUE_NAME int_square?|USER_TYPE|TYPE_CLASS) CHOICE LBRACE choice_def? {COMMA choice_def}* RBRACE { pin=3 }
-inner_construct_enum_expr       ::= (VALUE_NAME int_square?|USER_TYPE|TYPE_CLASS) ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL? { pin=3 }
-
-
+expr_                    ::= (primitive_expr|without_body_expr|body_choice_expr|body_enum_expr|body_sequence_expr|body_tagged_expr)
+primitive_expr           ::= values_? (types_)? ASSIGMENT (STR_LITERALS|NUMBER_INT|NUMBER_FLOAT) body_with_syntax_expr?
+without_body_expr        ::= values_? (types_)? ASSIGMENT CLASS_DEF? seq_of? element_
+body_choice_expr         ::= values_? (types_)? ASSIGMENT CLASS_DEF? CHOICE LBRACE choice_construct? {COMMA choice_construct}* RBRACE body_with_syntax_expr? { pin=6 }
+body_enum_expr           ::= values_? (types_)? ASSIGMENT CLASS_DEF? ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL? body_with_syntax_expr? { pin=6 }
+body_sequence_expr       ::= values_? (types_)? ASSIGMENT CLASS_DEF? SEQUENCE LBRACE sequence_construct? {COMMA sequence_construct}* RBRACE body_with_syntax_expr? { pin=6 }
+body_tagged_expr         ::= values_? (types_)? ASSIGMENT CLASS_DEF? LBRACE (values_or|variables_|oid_|data_|seq_of_value|inner_expr)* RBRACE body_with_syntax_expr? { pin=5 }
+body_with_syntax_expr    ::= WITH SYNTAX LBRACE {types_ VAR (VALUE_NAME|USER_TYPE)}* RBRACE { pin=3 }
+/* inner expressions */
+inner_expr               ::= (inner_choice_expr|inner_enum_expr)
+inner_choice_expr        ::= (VALUE_NAME int_square?|USER_TYPE|TYPE_CLASS) CHOICE LBRACE choice_construct? {COMMA choice_construct}* RBRACE { pin=3 }
+inner_enum_expr          ::= (VALUE_NAME int_square?|USER_TYPE|TYPE_CLASS) ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL? { pin=3 }
+/* construct */
+oid_                     ::= OID (body_singleton|VALUE_NAME)
+data_                    ::= TYPE_CLASS seq_of? (USER_TYPE|body_choice)
+body_choice              ::= CHOICE LBRACE choice_construct? {COMMA choice_construct}* RBRACE { pin=2 }
+sequence_construct       ::= seq_of_value|choice_construct|inner_expr|id_tagged_construct
+choice_construct         ::= VALUE_NAME int_square? (seq_of|IMPLICIT|EXPLICIT)? (element_|body_enum)
+id_tagged_construct      ::= VALUE_NAME TYPE_CLASS DOT VAR values_ LPAREN body_singleton* RPAREN { pin=6 }
+body_singleton           ::= LBRACE AT? (types_|VALUE_NAME) RBRACE { pin=1 }
+body_enum                ::= ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL? { pin=2 }
