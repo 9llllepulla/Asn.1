@@ -15,131 +15,73 @@
 
 package com.gllllepulla.plugin.psi.token;
 
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
-import com.intellij.openapi.editor.HighlighterColors;
+import com.gllllepulla.plugin.psi.token.groups.GroupableToken;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
-import com.intellij.psi.TokenType;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
-import static com.gllllepulla.plugin.psi.AsnTypes.*;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 import static java.util.stream.Collectors.toMap;
 
 final class AsnTokensImpl implements AsnToken {
 
+    private static final Map<String, GroupableToken> TOKEN_GROUP_STRATEGY = GroupableToken.createTokenGroupStrategy();
+
     @Override
     public Map<TokenSet, TextAttributesKey[]> createTokensHighlighters() {
-        return Arrays.stream(TokenGroup.values())
+        return TOKEN_GROUP_STRATEGY.values()
+                .parallelStream()
                 .collect(toMap(
-                        this::getTokenSetByGroup,
-                        tokenGroup -> {
-                            var tokenGroupHighlighter = getTokenGroupHighlighter(tokenGroup);
-                            var textAttributesKey = createTextAttributesKey(tokenGroup.name(), tokenGroupHighlighter);
+                        token -> TokenSet.create(token.getGroupElements().toArray(IElementType[]::new)),
+                        token -> {
+                            var tokenGroupHighlighter = token.getGroupHighlighter();
+                            var textAttributesKey = createTextAttributesKey(token.getGroupName(), tokenGroupHighlighter);
                             return new TextAttributesKey[]{textAttributesKey};
                         }));
     }
 
-    @NotNull
     @Override
     public AttributesDescriptor[] createTokensHighlighterDescriptors() {
-        return Arrays.stream(TokenGroup.values())
-                .filter(tokenGroup -> tokenGroup != TokenGroup.ASN_BAD_CHARACTER)
-                .map(tokenGroup -> {
-                    var highlighterColor = getTokenGroupHighlighter(tokenGroup);
-                    return new AttributesDescriptor(tokenGroup.getDescription(), highlighterColor);
+        Predicate<GroupableToken> isNotBadCharacterToken = token -> token.groupingTypes()
+                .parallelStream()
+                .noneMatch(tokenTypeName -> tokenTypeName.equalsIgnoreCase("bad character"));
+        return TOKEN_GROUP_STRATEGY.values()
+                .parallelStream()
+                .filter(isNotBadCharacterToken)
+                .map(token -> {
+                    var groupHighlighter = token.getGroupHighlighter();
+                    return new AttributesDescriptor(token.getDescription(), groupHighlighter);
                 }).toArray(AttributesDescriptor[]::new);
-    }
-
-    private TextAttributesKey getTokenGroupHighlighter(TokenGroup tokenGroup) { // todo решить проблему одинаковых switch
-        switch (tokenGroup) {
-            case KEYWORDS:
-                return DefaultLanguageHighlighterColors.STATIC_METHOD;
-            case UNI_TYPES:
-                return DefaultLanguageHighlighterColors.CLASS_REFERENCE;
-            case TYPE_STRINGS:
-                return DefaultLanguageHighlighterColors.STATIC_FIELD;
-            case IDENTIFIERS:
-                return DefaultLanguageHighlighterColors.STRING;
-            case PRIMITIVES:
-                return DefaultLanguageHighlighterColors.CLASS_REFERENCE;
-            case BIT_STRINGS:
-                return DefaultLanguageHighlighterColors.LABEL;
-            case BRACKETS:
-                return DefaultLanguageHighlighterColors.KEYWORD;
-            case OPERATORS:
-                return DefaultLanguageHighlighterColors.KEYWORD;
-            case LINE_COMMENT:
-                return DefaultLanguageHighlighterColors.BLOCK_COMMENT;
-            case SYMBOLS:
-                return DefaultLanguageHighlighterColors.COMMA;
-            case DATE_TIME:
-                return DefaultLanguageHighlighterColors.CONSTANT;
-            case GLOBAL_TYPES:
-                return DefaultLanguageHighlighterColors.GLOBAL_VARIABLE;
-            case ASN_BAD_CHARACTER:
-                return HighlighterColors.BAD_CHARACTER;
-            case WHITE_SPACE_TYPES:
-                return HighlighterColors.NO_HIGHLIGHTING;
-            default:
-                throw new IllegalArgumentException("Highlighting for TokenGroup: " + tokenGroup + " not defined");
-        }
-    }
-
-    @NotNull
-    private TokenSet getTokenSetByGroup(TokenGroup tokenGroup) {
-        switch (tokenGroup) {
-            case UNI_TYPES:
-                return TokenSet.create(BOOLEAN, DEFAULT, INTEGER, NULL, OID, OPTIONAL, REAL, UNIQUE);
-            case BIT_STRINGS:
-                return TokenSet.create(BIT, OCTET);
-            case TYPE_STRINGS:
-                return TokenSet.create(STRING_BMP, STRING_CHAR, STRING_GEN, STRING_GRAPH, STRING_IA5, STRING_NUM, STRING_PR, STRING_TELE, STRING_UNI,
-                        STRING_UTF8, STRING_VIS, STRING_VTEXT);
-            case BRACES:
-                return TokenSet.create(LBRACE, RBRACE);
-            case BRACKETS:
-                return TokenSet.create(LPAREN, RPAREN, LBRACKET, RBRACKET);
-            case OPERATORS:
-                return TokenSet.create(AT, VAR, ASSIGMENT);
-            case SYMBOLS:
-                return TokenSet.create(COLON, COMMA, DOT, DOUBLE_DOT, DOUBLE_QUOTE, MINUS, OR, SEMICOLON);
-            case BLOCK_COMMENT:
-                return TokenSet.create(COMMENT_MULTILINE);
-            case LINE_COMMENT:
-                return TokenSet.create(COMMENT_LINE, COMMENT_HEADER);
-            case DATE_TIME:
-                return TokenSet.create(DATE, DATE_TIME, DURATION, TIME, TIME_GEN, TIME_OF_DAY, TIME_UTC);
-            case IDENTIFIERS:
-                return TokenSet.create(TYPE_CLASS, USER_TYPE, VALUE_NAME);
-            case PRIMITIVES:
-                return TokenSet.create(NUMBER_FLOAT, NUMBER_INT, STR_LITERALS, FALSE, TRUE);
-            case GLOBAL_TYPES:
-                return TokenSet.create(APPLICATION, CONTENT_SPECIFIC, PRIVATE, UNIVERSAL);
-            case KEYWORDS:
-                return TokenSet.create(SET, EXTERNAL, INSTANCE, SEQUENCE, OF, BEGIN, END, DEFINITIONS, FROM, CLASS_DEF, ANY, CHOICE, IMPLICIT, EXPLICIT, SIZE,
-                        MAX, MIN, ENUMERATED, WITH, SYNTAX, TAGS, EXPORTS, IMPORTS, CONTAINING, TYPE_IDENTIFIER);
-            case ASN_BAD_CHARACTER:
-                return TokenSet.create(TokenType.BAD_CHARACTER);
-            case WHITE_SPACE_TYPES:
-                return TokenSet.create(TokenType.WHITE_SPACE);
-            default:
-                throw new IllegalArgumentException("TokenSet for TokenGroup: " + tokenGroup + " not defined");
-        }
     }
 
     @Override
     public TokenSet getCommentTokens() {
-        return getTokenSetByGroup(TokenGroup.LINE_COMMENT);
+        return createTokenSet("comment");
     }
 
     @Override
     public TokenSet getWhiteSpaceTokens() {
-        return getTokenSetByGroup(TokenGroup.WHITE_SPACE_TYPES);
+        return createTokenSet("whitespace");
+    }
+
+    @NotNull
+    private TokenSet createTokenSet(String... groupNames) {
+        Set<String> names = Set.of(groupNames);
+        Predicate<GroupableToken> tokenPredicate = token -> token.groupingTypes()
+                .parallelStream()
+                .anyMatch(names::contains);
+        IElementType[] commentsTypes = TOKEN_GROUP_STRATEGY.values()
+                .parallelStream()
+                .filter(tokenPredicate)
+                .flatMap(token -> token.getGroupElements().stream())
+                .toArray(IElementType[]::new);
+        return TokenSet.create(commentsTypes);
     }
 
 }
