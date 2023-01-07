@@ -55,9 +55,9 @@ final class AsnTokensImpl implements AsnToken {
                 }).toArray(AttributesDescriptor[]::new);
     }
 
-    private TextAttributesKey getTokenGroupHighlighter(TokenGroup tokenGroup) {
+    private TextAttributesKey getTokenGroupHighlighter(TokenGroup tokenGroup) { // todo решить проблему одинаковых switch
         switch (tokenGroup) {
-            case EXPRESSIONS:
+            case KEYWORDS:
                 return DefaultLanguageHighlighterColors.STATIC_METHOD;
             case UNI_TYPES:
                 return DefaultLanguageHighlighterColors.CLASS_REFERENCE;
@@ -73,7 +73,7 @@ final class AsnTokensImpl implements AsnToken {
                 return DefaultLanguageHighlighterColors.KEYWORD;
             case OPERATORS:
                 return DefaultLanguageHighlighterColors.KEYWORD;
-            case COMMENTS:
+            case LINE_COMMENT:
                 return DefaultLanguageHighlighterColors.BLOCK_COMMENT;
             case SYMBOLS:
                 return DefaultLanguageHighlighterColors.COMMA;
@@ -94,29 +94,33 @@ final class AsnTokensImpl implements AsnToken {
     private TokenSet getTokenSetByGroup(TokenGroup tokenGroup) {
         switch (tokenGroup) {
             case UNI_TYPES:
-                return TokenSet.create(INTEGER, NULL, BOOLEAN, OID, REAL, OPTIONAL, DEFAULT, UNIQUE);
+                return TokenSet.create(BOOLEAN, DEFAULT, INTEGER, NULL, OID, OPTIONAL, REAL, UNIQUE);
             case BIT_STRINGS:
                 return TokenSet.create(BIT, OCTET);
             case TYPE_STRINGS:
-                return TokenSet.create(STRING_BMP, STRING_CHAR, STRING_PR, STRING_GEN, STRING_GRAPH, STRING_IA5,
-                        STRING_NUM, STRING_UTF8, STRING_UNI, STRING_VIS, STRING_TELE, STRING_VTEXT);
+                return TokenSet.create(STRING_BMP, STRING_CHAR, STRING_GEN, STRING_GRAPH, STRING_IA5, STRING_NUM, STRING_PR, STRING_TELE, STRING_UNI,
+                        STRING_UTF8, STRING_VIS, STRING_VTEXT);
+            case BRACES:
+                return TokenSet.create(LBRACE, RBRACE);
             case BRACKETS:
                 return TokenSet.create(LPAREN, RPAREN, LBRACKET, RBRACKET);
             case OPERATORS:
-                return TokenSet.create(VAR, ASSIGMENT);
+                return TokenSet.create(AT, VAR, ASSIGMENT);
             case SYMBOLS:
-                return TokenSet.create(COMMA, SEMICOLON, DOUBLE_DOT, DOT, OR, MINUS, AT, COLON, DOUBLE_QUOTE);
-            case COMMENTS:
-                return TokenSet.create(COMMENT_LINE, COMMENT_HEADER, COMMENT_MULTILINE);
+                return TokenSet.create(COLON, COMMA, DOT, DOUBLE_DOT, DOUBLE_QUOTE, MINUS, OR, SEMICOLON);
+            case BLOCK_COMMENT:
+                return TokenSet.create(COMMENT_MULTILINE);
+            case LINE_COMMENT:
+                return TokenSet.create(COMMENT_LINE, COMMENT_HEADER);
             case DATE_TIME:
-                return TokenSet.create(DURATION, DATE, DATE_TIME, TIME, TIME_GEN, TIME_OF_DAY, TIME_UTC);
+                return TokenSet.create(DATE, DATE_TIME, DURATION, TIME, TIME_GEN, TIME_OF_DAY, TIME_UTC);
             case IDENTIFIERS:
-                return TokenSet.create(USER_TYPE, TYPE_CLASS, VALUE_NAME);
+                return TokenSet.create(TYPE_CLASS, USER_TYPE, VALUE_NAME);
             case PRIMITIVES:
-                return TokenSet.create(STR_LITERALS, NUMBER_FLOAT, NUMBER_INT);
+                return TokenSet.create(NUMBER_FLOAT, NUMBER_INT, STR_LITERALS, FALSE, TRUE);
             case GLOBAL_TYPES:
-                return TokenSet.create(UNIVERSAL, APPLICATION, CONTENT_SPECIFIC, PRIVATE);
-            case EXPRESSIONS:
+                return TokenSet.create(APPLICATION, CONTENT_SPECIFIC, PRIVATE, UNIVERSAL);
+            case KEYWORDS:
                 return TokenSet.create(SET, EXTERNAL, INSTANCE, SEQUENCE, OF, BEGIN, END, DEFINITIONS, FROM, CLASS_DEF, ANY, CHOICE, IMPLICIT, EXPLICIT, SIZE,
                         MAX, MIN, ENUMERATED, WITH, SYNTAX, TAGS, EXPORTS, IMPORTS, CONTAINING, TYPE_IDENTIFIER);
             case ASN_BAD_CHARACTER:
@@ -130,7 +134,7 @@ final class AsnTokensImpl implements AsnToken {
 
     @Override
     public TokenSet getCommentTokens() {
-        return getTokenSetByGroup(TokenGroup.COMMENTS);
+        return getTokenSetByGroup(TokenGroup.LINE_COMMENT);
     }
 
     @Override
@@ -139,3 +143,36 @@ final class AsnTokensImpl implements AsnToken {
     }
 
 }
+    /*
+  // выражения
+  IElementType BODY_CHOICE_EXPR = new AsnElementType("BODY_CHOICE_EXPR");
+        IElementType BODY_CHOICE = new AsnElementType("BODY_CHOICE");
+
+  IElementType BODY_ENUM_EXPR = new AsnElementType("BODY_ENUM_EXPR");
+        IElementType BODY_ENUM = new AsnElementType("BODY_ENUM");
+
+  IElementType BODY_SEQUENCE_EXPR = new AsnElementType("BODY_SEQUENCE_EXPR");
+  IElementType BODY_TAGGED_EXPR = new AsnElementType("BODY_TAGGED_EXPR");
+
+  IElementType INNER_EXPR = new AsnElementType("INNER_CONSTRUCT");
+        IElementType INNER_CHOICE_EXPR = new AsnElementType("INNER_CONSTRUCT_CHOICE_EXPR");
+        IElementType INNER_ENUM_EXPR = new AsnElementType("INNER_CONSTRUCT_ENUM_EXPR");
+
+  IElementType PRIMITIVE_EXPR = new AsnElementType("PRIMITIVE_EXPR");
+  IElementType WITHOUT_BODY_EXPR = new AsnElementType("WITHOUT_BODY_EXPR");
+  IElementType BODY_WITH_SYNTAX_EXPR = new AsnElementType("WITH_SYNTAX_EXPR");
+  IElementType BODY_SINGLETON = new AsnElementType("SINGLETON_BODY");
+  IElementType ID_TAGGED_CONSTRUCT = new AsnElementType("ID_TAGGED");
+  IElementType ENUM_ELEMENT = new AsnElementType("ENUM_ELEMENT");
+
+  IElementType IMPORTS_ = new AsnElementType("IMPORTS_");
+  IElementType FROM_ = new AsnElementType("FROM_");
+  IElementType FILE_HEADER = new AsnElementType("FILE_HEADER");
+  IElementType EXPORTS_ = new AsnElementType("EXPORTS_");
+
+  // значения в скобках
+  IElementType INT_SQUARE = new AsnElementType("INT_SQUARE");
+  IElementType RANGE_ = new AsnElementType("RANGE_");
+  IElementType SIZE_RANGE = new AsnElementType("SIZE_RANGE");
+  IElementType INT_RANGE_EXPR
+  */
