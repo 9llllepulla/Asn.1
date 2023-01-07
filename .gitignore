@@ -18,7 +18,6 @@ out/
 !/src/main/java/com/gllllepulla/plugin/grammar/Asn.bnf
 /src/main/java/com/gllllepulla/plugin/grammar/*.bnf
 
-/src/main/gen
 /src/main/kotlin
 
 *.flex

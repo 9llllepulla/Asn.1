@@ -58,13 +58,13 @@ public class AsnFormattingModelBuilder implements FormattingModelBuilder {
     }
 
     private SpacingBuilder typeStringRule() {
-        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .around(AsnTypes.TYPE_STRING).spaces(1);
+        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE);
+                //.around(AsnTypes.TYPE_STRING).spaces(1); // fixme
     }
 
     private SpacingBuilder numberingRule() {
         return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .around(AsnTypes.INT_ROUND).spaces(1)
+                //.around(AsnTypes.INT_ROUND).spaces(1) fixme
                 .around(AsnTypes.INT_SQUARE).spaces(1)
                 .around(AsnTypes.SIZE_RANGE).spaces(1);
     }
