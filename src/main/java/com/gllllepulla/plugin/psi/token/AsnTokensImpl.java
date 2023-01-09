@@ -16,6 +16,7 @@
 package com.gllllepulla.plugin.psi.token;
 
 import com.gllllepulla.plugin.psi.token.groups.GroupableToken;
+import com.gllllepulla.plugin.psi.token.groups.GroupingType;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.psi.tree.IElementType;
@@ -26,17 +27,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import static com.gllllepulla.plugin.psi.token.groups.GroupingType.*;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 import static java.util.stream.Collectors.toMap;
 
 final class AsnTokensImpl implements AsnToken {
 
-    private static final Map<String, GroupableToken> TOKEN_GROUP_STRATEGY = GroupableToken.createTokenGroupStrategy();
+    private static final Set<GroupableToken> TOKEN_GROUPS = GroupableToken.createTokenGroups();
 
     @Override
     public Map<TokenSet, TextAttributesKey[]> createTokensHighlighters() {
-        return TOKEN_GROUP_STRATEGY.values()
-                .parallelStream()
+        return TOKEN_GROUPS.parallelStream()
                 .collect(toMap(
                         token -> TokenSet.create(token.getGroupElements().toArray(IElementType[]::new)),
                         token -> {
@@ -50,9 +51,8 @@ final class AsnTokensImpl implements AsnToken {
     public AttributesDescriptor[] createTokensHighlighterDescriptors() {
         Predicate<GroupableToken> isNotBadCharacterToken = token -> token.groupingTypes()
                 .parallelStream()
-                .noneMatch(tokenTypeName -> tokenTypeName.equalsIgnoreCase("bad character"));
-        return TOKEN_GROUP_STRATEGY.values()
-                .parallelStream()
+                .noneMatch(groupingType -> groupingType == BAD_CHARACTER);
+        return TOKEN_GROUPS.parallelStream()
                 .filter(isNotBadCharacterToken)
                 .map(token -> {
                     var groupHighlighter = token.getGroupHighlighter();
@@ -62,22 +62,21 @@ final class AsnTokensImpl implements AsnToken {
 
     @Override
     public TokenSet getCommentTokens() {
-        return createTokenSet("comment");
+        return createTokenSet(COMMENT);
     }
 
     @Override
     public TokenSet getWhiteSpaceTokens() {
-        return createTokenSet("whitespace");
+        return createTokenSet(WHITESPACE);
     }
 
     @NotNull
-    private TokenSet createTokenSet(String... groupNames) {
-        Set<String> names = Set.of(groupNames);
+    private TokenSet createTokenSet(GroupingType... groupingTypes) {
+        Set<GroupingType> types = Set.of(groupingTypes);
         Predicate<GroupableToken> tokenPredicate = token -> token.groupingTypes()
                 .parallelStream()
-                .anyMatch(names::contains);
-        IElementType[] commentsTypes = TOKEN_GROUP_STRATEGY.values()
-                .parallelStream()
+                .anyMatch(types::contains);
+        IElementType[] commentsTypes = TOKEN_GROUPS.parallelStream()
                 .filter(tokenPredicate)
                 .flatMap(token -> token.getGroupElements().stream())
                 .toArray(IElementType[]::new);

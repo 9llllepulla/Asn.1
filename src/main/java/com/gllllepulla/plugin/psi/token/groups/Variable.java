@@ -22,6 +22,7 @@ import com.intellij.psi.tree.IElementType;
 import java.util.List;
 
 import static com.gllllepulla.plugin.psi.AsnTypes.*;
+import static com.gllllepulla.plugin.psi.token.groups.GroupingType.VARIABLE;
 
 /**
  * Variable user's types of ASN lang: TYPE_CLASS, USER_TYPE, VALUE_NAME
@@ -29,8 +30,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.*;
 class Variable implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("variable");
+    public List<GroupingType> groupingTypes() {
+        return List.of(VARIABLE);
     }
 
     @Override

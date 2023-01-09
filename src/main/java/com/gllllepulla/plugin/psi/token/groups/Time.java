@@ -29,8 +29,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.*;
 class Time implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("time");
+    public List<GroupingType> groupingTypes() {
+        return List.of(GroupingType.TIME);
     }
 
     @Override

@@ -29,8 +29,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.COMMENT_MULTILINE;
 class BlockComment implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("comment");
+    public List<GroupingType> groupingTypes() {
+        return List.of(GroupingType.COMMENT);
     }
 
     @Override

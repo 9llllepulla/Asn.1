@@ -23,6 +23,7 @@ import java.util.List;
 
 import static com.gllllepulla.plugin.psi.AsnTypes.*;
 import static com.gllllepulla.plugin.psi.AsnTypes.SEMICOLON;
+import static com.gllllepulla.plugin.psi.token.groups.GroupingType.SYMBOL;
 
 /**
  * Types of symbols of ASN lang: COLON, COMMA, DOT, DOUBLE_DOT, DOUBLE_QUOTE, MINUS, OR, SEMICOLON
@@ -30,8 +31,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.SEMICOLON;
 class Symbol implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("symbol");
+    public List<GroupingType> groupingTypes() {
+        return List.of(SYMBOL);
     }
 
     @Override

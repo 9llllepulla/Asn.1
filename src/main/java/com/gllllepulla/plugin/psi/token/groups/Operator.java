@@ -22,6 +22,7 @@ import com.intellij.psi.tree.IElementType;
 import java.util.List;
 
 import static com.gllllepulla.plugin.psi.AsnTypes.*;
+import static com.gllllepulla.plugin.psi.token.groups.GroupingType.OPERATOR;
 
 /**
  * Types of operators of ASN lang: AT, VAR, ASSIGMENT
@@ -29,8 +30,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.*;
 class Operator implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("operator");
+    public List<GroupingType> groupingTypes() {
+        return List.of(OPERATOR);
     }
 
     @Override

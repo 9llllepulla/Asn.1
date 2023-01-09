@@ -19,13 +19,13 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public interface GroupableToken {
 
-    List<String> groupingTypes();
+    List<GroupingType> groupingTypes();
 
     String getDescription();
 
@@ -38,57 +38,24 @@ public interface GroupableToken {
     }
 
     @NotNull
-    static Map<String, GroupableToken> createTokenGroupStrategy() {
-        Map<String, GroupableToken> strategy = new HashMap<>();
-
-        var universalType = new UniversalType();
-        strategy.put(universalType.getGroupName(), universalType);
-
-        var bitString = new BitString();
-        strategy.put(bitString.getGroupName(), bitString);
-
-        var badCharacter = new BadCharacter();
-        strategy.put(bitString.getGroupName(), badCharacter);
-
-        var whiteSpace = new WhiteSpace();
-        strategy.put(whiteSpace.getGroupName(), whiteSpace);
-
-        var symbol = new Symbol();
-        strategy.put(symbol.getGroupName(), symbol);
-
-        var operator = new Operator();
-        strategy.put(operator.getGroupName(), operator);
-
-        var braces = new Braces();
-        strategy.put(bitString.getGroupName(), braces);
-
-        var brackets = new Brackets();
-        strategy.put(brackets.getGroupName(), brackets);
-
-        var lineComment = new LineComment();
-        strategy.put(lineComment.getGroupName(), lineComment);
-
-        var blockComment = new BlockComment();
-        strategy.put(blockComment.getGroupName(),blockComment);
-
-        var time = new Time();
-        strategy.put(time.getGroupName(), time);
-
-        var specialString = new SpecialString();
-        strategy.put(specialString.getGroupName(), specialString);
-
-        var primitive = new Primitive();
-        strategy.put(primitive.getGroupName(), primitive);
-
-        var generalKeyword = new GeneralKeyword();
-        strategy.put(generalKeyword.getGroupName(), generalKeyword);
-
-        var variable = new Variable();
-        strategy.put(variable.getGroupName(), variable);
-
-        var keyword = new Keyword();
-        strategy.put(keyword.getGroupName(), keyword);
-
+    static Set<GroupableToken> createTokenGroups() {
+        Set<GroupableToken> strategy = new HashSet<>();
+        strategy.add(new UniversalType());
+        strategy.add(new BitString());
+        strategy.add(new BadCharacter());
+        strategy.add(new WhiteSpace());
+        strategy.add(new Symbol());
+        strategy.add(new Operator());
+        strategy.add(new Braces());
+        strategy.add(new Brackets());
+        strategy.add(new LineComment());
+        strategy.add(new BlockComment());
+        strategy.add(new Time());
+        strategy.add(new SpecialString());
+        strategy.add(new Primitive());
+        strategy.add(new GeneralKeyword());
+        strategy.add(new Variable());
+        strategy.add(new Keyword());
         return strategy;
     }
 

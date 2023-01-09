@@ -28,8 +28,8 @@ import java.util.List;
 class BadCharacter implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("bad character");
+    public List<GroupingType> groupingTypes() {
+        return List.of(GroupingType.BAD_CHARACTER);
     }
 
     @Override

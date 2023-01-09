@@ -55,8 +55,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.*;
 class Keyword implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of(getDescription());
+    public List<GroupingType> groupingTypes() {
+        return List.of(GroupingType.KEYWORD);
     }
 
     @Override

@@ -30,8 +30,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.OCTET;
 class BitString implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("bit string");
+    public List<GroupingType> groupingTypes() {
+        return List.of(GroupingType.BIT_STRING);
     }
 
     @Override
