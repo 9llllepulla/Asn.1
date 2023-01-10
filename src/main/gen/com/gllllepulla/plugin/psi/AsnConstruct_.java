@@ -5,13 +5,13 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface AsnSequenceConstruct extends PsiElement {
+public interface AsnConstruct_ extends PsiElement {
 
   @Nullable
-  AsnChoiceConstruct getChoiceConstruct();
+  AsnElementsConst getElementsConst();
 
   @Nullable
-  AsnIdTaggedConstruct getIdTaggedConstruct();
+  AsnIdTaggedConst getIdTaggedConst();
 
   @Nullable
   AsnInnerExpr getInnerExpr();

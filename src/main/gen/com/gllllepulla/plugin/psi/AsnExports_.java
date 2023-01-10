@@ -8,13 +8,16 @@ import com.intellij.psi.PsiElement;
 public interface AsnExports_ extends PsiElement {
 
   @Nullable
-  AsnTypes_ getTypes_();
+  AsnAllValues_ getAllValues_();
 
   @NotNull
   List<AsnValues_> getValues_List();
 
   @NotNull
   PsiElement getExports();
+
+  @Nullable
+  PsiElement getOid();
 
   @Nullable
   PsiElement getSemicolon();

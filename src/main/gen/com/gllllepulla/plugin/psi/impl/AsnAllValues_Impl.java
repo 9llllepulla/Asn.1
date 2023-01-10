@@ -11,14 +11,14 @@ import static com.gllllepulla.plugin.psi.AsnTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.gllllepulla.plugin.psi.*;
 
-public class AsnBodyChoiceImpl extends ASTWrapperPsiElement implements AsnBodyChoice {
+public class AsnAllValues_Impl extends ASTWrapperPsiElement implements AsnAllValues_ {
 
-  public AsnBodyChoiceImpl(@NotNull ASTNode node) {
+  public AsnAllValues_Impl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull AsnVisitor visitor) {
-    visitor.visitBodyChoice(this);
+    visitor.visitAllValues_(this);
   }
 
   @Override
@@ -28,27 +28,15 @@ public class AsnBodyChoiceImpl extends ASTWrapperPsiElement implements AsnBodyCh
   }
 
   @Override
-  @NotNull
-  public List<AsnChoiceConstruct> getChoiceConstructList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnChoiceConstruct.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getChoice() {
-    return findNotNullChildByType(CHOICE);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLbrace() {
-    return findNotNullChildByType(LBRACE);
+  @Nullable
+  public AsnValues_ getValues_() {
+    return findChildByClass(AsnValues_.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getRbrace() {
-    return findChildByType(RBRACE);
+  public PsiElement getTypeClass() {
+    return findChildByType(TYPE_CLASS);
   }
 
 }

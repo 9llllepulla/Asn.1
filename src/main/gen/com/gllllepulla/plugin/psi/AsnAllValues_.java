@@ -5,15 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface AsnFrom_ extends PsiElement {
+public interface AsnAllValues_ extends PsiElement {
 
-  @NotNull
-  List<AsnValues_> getValues_List();
+  @Nullable
+  AsnValues_ getValues_();
 
-  @NotNull
-  PsiElement getFrom();
-
-  @NotNull
-  PsiElement getUserType();
+  @Nullable
+  PsiElement getTypeClass();
 
 }

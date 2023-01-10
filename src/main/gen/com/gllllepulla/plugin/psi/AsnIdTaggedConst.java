@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface AsnIdTaggedConstruct extends PsiElement {
+public interface AsnIdTaggedConst extends PsiElement {
 
   @NotNull
   List<AsnBodySingleton> getBodySingletonList();

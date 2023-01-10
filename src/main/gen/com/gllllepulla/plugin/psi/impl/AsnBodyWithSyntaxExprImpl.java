@@ -35,6 +35,12 @@ public class AsnBodyWithSyntaxExprImpl extends ASTWrapperPsiElement implements A
 
   @Override
   @NotNull
+  public List<AsnValues_> getValues_List() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnValues_.class);
+  }
+
+  @Override
+  @NotNull
   public PsiElement getLbrace() {
     return findNotNullChildByType(LBRACE);
   }

@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface AsnImports_ extends PsiElement {
 
   @NotNull
-  List<AsnFrom_> getFrom_List();
+  List<AsnAllValues_> getAllValues_List();
 
   @NotNull
   PsiElement getImports();

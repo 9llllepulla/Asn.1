@@ -22,6 +22,8 @@ import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 
 import static com.gllllepulla.plugin.AsnFileType.ASN_TOKEN_INSTANCE;
+import static com.gllllepulla.plugin.psi.AsnTypes.LBRACE;
+import static com.gllllepulla.plugin.psi.AsnTypes.RBRACE;
 
 public class AsnFormattingModelBuilder implements FormattingModelBuilder {
 
@@ -37,16 +39,18 @@ public class AsnFormattingModelBuilder implements FormattingModelBuilder {
 
     private SpacingBuilder createSpaceBuilder() {
         return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .append(comment())
-                .append(numberingRule())
-                .append(valuesRule())
-                .append(typeStringRule())
+                //.append(comment())
+                //.append(numberingRule())
+                //.append(valuesRule())
+                //.append(typeStringRule())
                 .append(expressionRule());
     }
 
     private SpacingBuilder expressionRule() {
+        /*return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
+                .betweenInside(AsnTypes.LBRACE, AsnTypes.RBRACE, AsnTypes.EXPR_).none();*/
         return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .betweenInside(AsnTypes.LBRACE, AsnTypes.RBRACE, AsnTypes.EXPR_).none();
+                .betweenInside(AsnTypes.LBRACE, AsnTypes.RBRACE, AsnTypes.BODY_ENUM).spaces(5);
     }
 
     private SpacingBuilder valuesRule() {
@@ -58,13 +62,13 @@ public class AsnFormattingModelBuilder implements FormattingModelBuilder {
     }
 
     private SpacingBuilder typeStringRule() {
-        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE);
-                //.around(AsnTypes.TYPE_STRING).spaces(1); // fixme
+        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
+                .around(AsnTypes.TYPES_).spaces(1);
     }
 
     private SpacingBuilder numberingRule() {
         return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                //.around(AsnTypes.INT_ROUND).spaces(1) fixme
+                .before(AsnTypes.RANGE_).spaces(1)
                 .around(AsnTypes.INT_SQUARE).spaces(1)
                 .around(AsnTypes.SIZE_RANGE).spaces(1);
     }

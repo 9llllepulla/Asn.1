@@ -36,52 +36,19 @@ public class AsnParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CHOICE LBRACE choice_construct? {COMMA choice_construct}* RBRACE
-  public static boolean body_choice(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_choice")) return false;
-    if (!nextTokenIs(b, CHOICE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, BODY_CHOICE, null);
-    r = consumeTokens(b, 2, CHOICE, LBRACE);
-    p = r; // pin = 2
-    r = r && report_error_(b, body_choice_2(b, l + 1));
-    r = p && report_error_(b, body_choice_3(b, l + 1)) && r;
-    r = p && consumeToken(b, RBRACE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // choice_construct?
-  private static boolean body_choice_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_choice_2")) return false;
-    choice_construct(b, l + 1);
-    return true;
-  }
-
-  // {COMMA choice_construct}*
-  private static boolean body_choice_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_choice_3")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!body_choice_3_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "body_choice_3", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA choice_construct
-  private static boolean body_choice_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_choice_3_0")) return false;
+  // values_|TYPE_CLASS
+  public static boolean all_values_(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "all_values_")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && choice_construct(b, l + 1);
-    exit_section_(b, m, null, r);
+    Marker m = enter_section_(b, l, _NONE_, ALL_VALUES_, "<all values>");
+    r = values_(b, l + 1);
+    if (!r) r = consumeToken(b, TYPE_CLASS);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // values_? (types_)? ASSIGMENT CLASS_DEF? CHOICE LBRACE choice_construct? {COMMA choice_construct}* RBRACE body_with_syntax_expr?
+  // values_? (types_)? ASSIGMENT CLASS_DEF? CHOICE LBRACE elements_const? {COMMA elements_const}* RBRACE body_with_syntax_expr?
   public static boolean body_choice_expr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_choice_expr")) return false;
     boolean r, p;
@@ -131,14 +98,14 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // choice_construct?
+  // elements_const?
   private static boolean body_choice_expr_6(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_choice_expr_6")) return false;
-    choice_construct(b, l + 1);
+    elements_const(b, l + 1);
     return true;
   }
 
-  // {COMMA choice_construct}*
+  // {COMMA elements_const}*
   private static boolean body_choice_expr_7(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_choice_expr_7")) return false;
     while (true) {
@@ -149,13 +116,13 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COMMA choice_construct
+  // COMMA elements_const
   private static boolean body_choice_expr_7_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_choice_expr_7_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && choice_construct(b, l + 1);
+    r = r && elements_const(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -164,59 +131,6 @@ public class AsnParser implements PsiParser, LightPsiParser {
   private static boolean body_choice_expr_9(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_choice_expr_9")) return false;
     body_with_syntax_expr(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL?
-  public static boolean body_enum(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_enum")) return false;
-    if (!nextTokenIs(b, ENUMERATED)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, BODY_ENUM, null);
-    r = consumeTokens(b, 2, ENUMERATED, LBRACE);
-    p = r; // pin = 2
-    r = r && report_error_(b, body_enum_2(b, l + 1));
-    r = p && report_error_(b, body_enum_3(b, l + 1)) && r;
-    r = p && report_error_(b, consumeToken(b, RBRACE)) && r;
-    r = p && body_enum_5(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // enum_element?
-  private static boolean body_enum_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_enum_2")) return false;
-    enum_element(b, l + 1);
-    return true;
-  }
-
-  // {COMMA enum_element}*
-  private static boolean body_enum_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_enum_3")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!body_enum_3_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "body_enum_3", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA enum_element
-  private static boolean body_enum_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_enum_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && enum_element(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // OPTIONAL?
-  private static boolean body_enum_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_enum_5")) return false;
-    consumeToken(b, OPTIONAL);
     return true;
   }
 
@@ -316,7 +230,7 @@ public class AsnParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // values_? (types_)? ASSIGMENT CLASS_DEF? SEQUENCE LBRACE sequence_construct? {COMMA sequence_construct}* RBRACE body_with_syntax_expr?
+  // values_? (types_)? ASSIGMENT CLASS_DEF? SEQUENCE LBRACE construct_? {COMMA construct_}* RBRACE body_with_syntax_expr?
   public static boolean body_sequence_expr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_sequence_expr")) return false;
     boolean r, p;
@@ -366,14 +280,14 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // sequence_construct?
+  // construct_?
   private static boolean body_sequence_expr_6(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_sequence_expr_6")) return false;
-    sequence_construct(b, l + 1);
+    construct_(b, l + 1);
     return true;
   }
 
-  // {COMMA sequence_construct}*
+  // {COMMA construct_}*
   private static boolean body_sequence_expr_7(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_sequence_expr_7")) return false;
     while (true) {
@@ -384,13 +298,13 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COMMA sequence_construct
+  // COMMA construct_
   private static boolean body_sequence_expr_7_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_sequence_expr_7_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && sequence_construct(b, l + 1);
+    r = r && construct_(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -516,7 +430,7 @@ public class AsnParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // WITH SYNTAX LBRACE {types_ VAR (VALUE_NAME|USER_TYPE)}* RBRACE
+  // WITH SYNTAX LBRACE {types_ VAR values_}* RBRACE
   public static boolean body_with_syntax_expr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_with_syntax_expr")) return false;
     if (!nextTokenIs(b, WITH)) return false;
@@ -530,7 +444,7 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // {types_ VAR (VALUE_NAME|USER_TYPE)}*
+  // {types_ VAR values_}*
   private static boolean body_with_syntax_expr_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_with_syntax_expr_3")) return false;
     while (true) {
@@ -541,24 +455,15 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // types_ VAR (VALUE_NAME|USER_TYPE)
+  // types_ VAR values_
   private static boolean body_with_syntax_expr_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "body_with_syntax_expr_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = types_(b, l + 1);
     r = r && consumeToken(b, VAR);
-    r = r && body_with_syntax_expr_3_0_2(b, l + 1);
+    r = r && values_(b, l + 1);
     exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // VALUE_NAME|USER_TYPE
-  private static boolean body_with_syntax_expr_3_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "body_with_syntax_expr_3_0_2")) return false;
-    boolean r;
-    r = consumeToken(b, VALUE_NAME);
-    if (!r) r = consumeToken(b, USER_TYPE);
     return r;
   }
 
@@ -600,80 +505,90 @@ public class AsnParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VALUE_NAME int_square? (seq_of|IMPLICIT|EXPLICIT)? (element_|body_enum)
-  public static boolean choice_construct(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "choice_construct")) return false;
-    if (!nextTokenIs(b, VALUE_NAME)) return false;
+  // seq_of_value|elements_const|inner_expr|id_tagged_const
+  public static boolean construct_(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "construct_")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, VALUE_NAME);
-    r = r && choice_construct_1(b, l + 1);
-    r = r && choice_construct_2(b, l + 1);
-    r = r && choice_construct_3(b, l + 1);
-    exit_section_(b, m, CHOICE_CONSTRUCT, r);
-    return r;
-  }
-
-  // int_square?
-  private static boolean choice_construct_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "choice_construct_1")) return false;
-    int_square(b, l + 1);
-    return true;
-  }
-
-  // (seq_of|IMPLICIT|EXPLICIT)?
-  private static boolean choice_construct_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "choice_construct_2")) return false;
-    choice_construct_2_0(b, l + 1);
-    return true;
-  }
-
-  // seq_of|IMPLICIT|EXPLICIT
-  private static boolean choice_construct_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "choice_construct_2_0")) return false;
-    boolean r;
-    r = seq_of(b, l + 1);
-    if (!r) r = consumeToken(b, IMPLICIT);
-    if (!r) r = consumeToken(b, EXPLICIT);
-    return r;
-  }
-
-  // element_|body_enum
-  private static boolean choice_construct_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "choice_construct_3")) return false;
-    boolean r;
-    r = element_(b, l + 1);
-    if (!r) r = body_enum(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, CONSTRUCT_, "<construct>");
+    r = seq_of_value(b, l + 1);
+    if (!r) r = elements_const(b, l + 1);
+    if (!r) r = inner_expr(b, l + 1);
+    if (!r) r = id_tagged_const(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // TYPE_CLASS seq_of? (USER_TYPE|body_choice)
+  // TYPE_CLASS seq_of? USER_TYPE|(CHOICE LBRACE elements_const? {COMMA elements_const}* RBRACE)
   public static boolean data_(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "data_")) return false;
-    if (!nextTokenIs(b, TYPE_CLASS)) return false;
+    if (!nextTokenIs(b, "<data>", CHOICE, TYPE_CLASS)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, DATA_, "<data>");
+    r = data__0(b, l + 1);
+    if (!r) r = data__1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // TYPE_CLASS seq_of? USER_TYPE
+  private static boolean data__0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "data__0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, TYPE_CLASS);
-    r = r && data__1(b, l + 1);
-    r = r && data__2(b, l + 1);
-    exit_section_(b, m, DATA_, r);
+    r = r && data__0_1(b, l + 1);
+    r = r && consumeToken(b, USER_TYPE);
+    exit_section_(b, m, null, r);
     return r;
   }
 
   // seq_of?
-  private static boolean data__1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "data__1")) return false;
+  private static boolean data__0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "data__0_1")) return false;
     seq_of(b, l + 1);
     return true;
   }
 
-  // USER_TYPE|body_choice
-  private static boolean data__2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "data__2")) return false;
+  // CHOICE LBRACE elements_const? {COMMA elements_const}* RBRACE
+  private static boolean data__1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "data__1")) return false;
     boolean r;
-    r = consumeToken(b, USER_TYPE);
-    if (!r) r = body_choice(b, l + 1);
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, CHOICE, LBRACE);
+    r = r && data__1_2(b, l + 1);
+    r = r && data__1_3(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // elements_const?
+  private static boolean data__1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "data__1_2")) return false;
+    elements_const(b, l + 1);
+    return true;
+  }
+
+  // {COMMA elements_const}*
+  private static boolean data__1_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "data__1_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!data__1_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "data__1_3", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA elements_const
+  private static boolean data__1_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "data__1_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && elements_const(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -711,6 +626,106 @@ public class AsnParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // VALUE_NAME int_square? (seq_of|IMPLICIT|EXPLICIT)? (element_|(ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL?))
+  public static boolean elements_const(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const")) return false;
+    if (!nextTokenIs(b, VALUE_NAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, VALUE_NAME);
+    r = r && elements_const_1(b, l + 1);
+    r = r && elements_const_2(b, l + 1);
+    r = r && elements_const_3(b, l + 1);
+    exit_section_(b, m, ELEMENTS_CONST, r);
+    return r;
+  }
+
+  // int_square?
+  private static boolean elements_const_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const_1")) return false;
+    int_square(b, l + 1);
+    return true;
+  }
+
+  // (seq_of|IMPLICIT|EXPLICIT)?
+  private static boolean elements_const_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const_2")) return false;
+    elements_const_2_0(b, l + 1);
+    return true;
+  }
+
+  // seq_of|IMPLICIT|EXPLICIT
+  private static boolean elements_const_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const_2_0")) return false;
+    boolean r;
+    r = seq_of(b, l + 1);
+    if (!r) r = consumeToken(b, IMPLICIT);
+    if (!r) r = consumeToken(b, EXPLICIT);
+    return r;
+  }
+
+  // element_|(ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL?)
+  private static boolean elements_const_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const_3")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = element_(b, l + 1);
+    if (!r) r = elements_const_3_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ENUMERATED LBRACE enum_element? {COMMA enum_element}* RBRACE OPTIONAL?
+  private static boolean elements_const_3_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const_3_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, ENUMERATED, LBRACE);
+    r = r && elements_const_3_1_2(b, l + 1);
+    r = r && elements_const_3_1_3(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
+    r = r && elements_const_3_1_5(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // enum_element?
+  private static boolean elements_const_3_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const_3_1_2")) return false;
+    enum_element(b, l + 1);
+    return true;
+  }
+
+  // {COMMA enum_element}*
+  private static boolean elements_const_3_1_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const_3_1_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!elements_const_3_1_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "elements_const_3_1_3", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA enum_element
+  private static boolean elements_const_3_1_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const_3_1_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && enum_element(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // OPTIONAL?
+  private static boolean elements_const_3_1_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "elements_const_3_1_5")) return false;
+    consumeToken(b, OPTIONAL);
+    return true;
+  }
+
+  /* ********************************************************** */
   // VALUE_NAME LPAREN NUMBER_INT RPAREN
   public static boolean enum_element(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "enum_element")) return false;
@@ -724,7 +739,7 @@ public class AsnParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EXPORTS (types_|values_) {COMMA values_}* SEMICOLON
+  // EXPORTS (all_values_|OID) {COMMA values_}* SEMICOLON
   public static boolean exports_(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "exports_")) return false;
     if (!nextTokenIs(b, EXPORTS)) return false;
@@ -739,12 +754,12 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // types_|values_
+  // all_values_|OID
   private static boolean exports__1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "exports__1")) return false;
     boolean r;
-    r = types_(b, l + 1);
-    if (!r) r = values_(b, l + 1);
+    r = all_values_(b, l + 1);
+    if (!r) r = consumeToken(b, OID);
     return r;
   }
 
@@ -851,88 +866,35 @@ public class AsnParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (TYPE_CLASS|values_) {COMMA (TYPE_CLASS|values_)}* FROM USER_TYPE
-  public static boolean from_(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "from_")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, FROM_, "<from>");
-    r = from__0(b, l + 1);
-    r = r && from__1(b, l + 1);
-    r = r && consumeTokens(b, 0, FROM, USER_TYPE);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // TYPE_CLASS|values_
-  private static boolean from__0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "from__0")) return false;
-    boolean r;
-    r = consumeToken(b, TYPE_CLASS);
-    if (!r) r = values_(b, l + 1);
-    return r;
-  }
-
-  // {COMMA (TYPE_CLASS|values_)}*
-  private static boolean from__1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "from__1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!from__1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "from__1", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA (TYPE_CLASS|values_)
-  private static boolean from__1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "from__1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && from__1_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // TYPE_CLASS|values_
-  private static boolean from__1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "from__1_0_1")) return false;
-    boolean r;
-    r = consumeToken(b, TYPE_CLASS);
-    if (!r) r = values_(b, l + 1);
-    return r;
-  }
-
-  /* ********************************************************** */
   // VALUE_NAME TYPE_CLASS DOT VAR values_ LPAREN body_singleton* RPAREN
-  public static boolean id_tagged_construct(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "id_tagged_construct")) return false;
+  public static boolean id_tagged_const(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "id_tagged_const")) return false;
     if (!nextTokenIs(b, VALUE_NAME)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ID_TAGGED_CONSTRUCT, null);
+    Marker m = enter_section_(b, l, _NONE_, ID_TAGGED_CONST, null);
     r = consumeTokens(b, 0, VALUE_NAME, TYPE_CLASS, DOT, VAR);
     r = r && values_(b, l + 1);
     r = r && consumeToken(b, LPAREN);
     p = r; // pin = 6
-    r = r && report_error_(b, id_tagged_construct_6(b, l + 1));
+    r = r && report_error_(b, id_tagged_const_6(b, l + 1));
     r = p && consumeToken(b, RPAREN) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   // body_singleton*
-  private static boolean id_tagged_construct_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "id_tagged_construct_6")) return false;
+  private static boolean id_tagged_const_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "id_tagged_const_6")) return false;
     while (true) {
       int c = current_position_(b);
       if (!body_singleton(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "id_tagged_construct_6", c)) break;
+      if (!empty_element_parsed_guard_(b, "id_tagged_const_6", c)) break;
     }
     return true;
   }
 
   /* ********************************************************** */
-  // IMPORTS from_* SEMICOLON
+  // IMPORTS {(all_values_) {COMMA (all_values_)}* FROM USER_TYPE}* SEMICOLON
   public static boolean imports_(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "imports_")) return false;
     if (!nextTokenIs(b, IMPORTS)) return false;
@@ -946,19 +908,73 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // from_*
+  // {(all_values_) {COMMA (all_values_)}* FROM USER_TYPE}*
   private static boolean imports__1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "imports__1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!from_(b, l + 1)) break;
+      if (!imports__1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "imports__1", c)) break;
     }
     return true;
   }
 
+  // (all_values_) {COMMA (all_values_)}* FROM USER_TYPE
+  private static boolean imports__1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "imports__1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = imports__1_0_0(b, l + 1);
+    r = r && imports__1_0_1(b, l + 1);
+    r = r && consumeTokens(b, 0, FROM, USER_TYPE);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (all_values_)
+  private static boolean imports__1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "imports__1_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = all_values_(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // {COMMA (all_values_)}*
+  private static boolean imports__1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "imports__1_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!imports__1_0_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "imports__1_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA (all_values_)
+  private static boolean imports__1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "imports__1_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && imports__1_0_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (all_values_)
+  private static boolean imports__1_0_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "imports__1_0_1_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = all_values_(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   /* ********************************************************** */
-  // (VALUE_NAME int_square?|USER_TYPE|TYPE_CLASS) CHOICE LBRACE choice_construct? {COMMA choice_construct}* RBRACE
+  // (VALUE_NAME int_square?|USER_TYPE|TYPE_CLASS) CHOICE LBRACE elements_const? {COMMA elements_const}* RBRACE
   public static boolean inner_choice_expr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "inner_choice_expr")) return false;
     boolean r, p;
@@ -1003,14 +1019,14 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // choice_construct?
+  // elements_const?
   private static boolean inner_choice_expr_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "inner_choice_expr_3")) return false;
-    choice_construct(b, l + 1);
+    elements_const(b, l + 1);
     return true;
   }
 
-  // {COMMA choice_construct}*
+  // {COMMA elements_const}*
   private static boolean inner_choice_expr_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "inner_choice_expr_4")) return false;
     while (true) {
@@ -1021,13 +1037,13 @@ public class AsnParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COMMA choice_construct
+  // COMMA elements_const
   private static boolean inner_choice_expr_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "inner_choice_expr_4_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && choice_construct(b, l + 1);
+    r = r && elements_const(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1356,20 +1372,6 @@ public class AsnParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "seq_of_value_3")) return false;
     consumeToken(b, OPTIONAL);
     return true;
-  }
-
-  /* ********************************************************** */
-  // seq_of_value|choice_construct|inner_expr|id_tagged_construct
-  public static boolean sequence_construct(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "sequence_construct")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SEQUENCE_CONSTRUCT, "<sequence construct>");
-    r = seq_of_value(b, l + 1);
-    if (!r) r = choice_construct(b, l + 1);
-    if (!r) r = inner_expr(b, l + 1);
-    if (!r) r = id_tagged_construct(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
   }
 
   /* ********************************************************** */

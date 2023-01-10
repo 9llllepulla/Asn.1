@@ -11,7 +11,7 @@ public interface AsnBodySequenceExpr extends PsiElement {
   AsnBodyWithSyntaxExpr getBodyWithSyntaxExpr();
 
   @NotNull
-  List<AsnSequenceConstruct> getSequenceConstructList();
+  List<AsnConstruct_> getConstruct_List();
 
   @Nullable
   AsnTypes_ getTypes_();

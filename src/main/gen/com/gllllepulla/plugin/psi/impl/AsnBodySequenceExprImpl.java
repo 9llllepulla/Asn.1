@@ -35,8 +35,8 @@ public class AsnBodySequenceExprImpl extends ASTWrapperPsiElement implements Asn
 
   @Override
   @NotNull
-  public List<AsnSequenceConstruct> getSequenceConstructList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnSequenceConstruct.class);
+  public List<AsnConstruct_> getConstruct_List() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnConstruct_.class);
   }
 
   @Override

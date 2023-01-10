@@ -11,14 +11,14 @@ import static com.gllllepulla.plugin.psi.AsnTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.gllllepulla.plugin.psi.*;
 
-public class AsnBodyEnumImpl extends ASTWrapperPsiElement implements AsnBodyEnum {
+public class AsnElementsConstImpl extends ASTWrapperPsiElement implements AsnElementsConst {
 
-  public AsnBodyEnumImpl(@NotNull ASTNode node) {
+  public AsnElementsConstImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull AsnVisitor visitor) {
-    visitor.visitBodyEnum(this);
+    visitor.visitElementsConst(this);
   }
 
   @Override
@@ -28,21 +28,51 @@ public class AsnBodyEnumImpl extends ASTWrapperPsiElement implements AsnBodyEnum
   }
 
   @Override
+  @Nullable
+  public AsnElement_ getElement_() {
+    return findChildByClass(AsnElement_.class);
+  }
+
+  @Override
   @NotNull
   public List<AsnEnumElement> getEnumElementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnEnumElement.class);
   }
 
   @Override
-  @NotNull
-  public PsiElement getEnumerated() {
-    return findNotNullChildByType(ENUMERATED);
+  @Nullable
+  public AsnIntSquare getIntSquare() {
+    return findChildByClass(AsnIntSquare.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public AsnSeqOf getSeqOf() {
+    return findChildByClass(AsnSeqOf.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnumerated() {
+    return findChildByType(ENUMERATED);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getExplicit() {
+    return findChildByType(EXPLICIT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getImplicit() {
+    return findChildByType(IMPLICIT);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLbrace() {
-    return findNotNullChildByType(LBRACE);
+    return findChildByType(LBRACE);
   }
 
   @Override
@@ -55,6 +85,12 @@ public class AsnBodyEnumImpl extends ASTWrapperPsiElement implements AsnBodyEnum
   @Nullable
   public PsiElement getRbrace() {
     return findChildByType(RBRACE);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getValueName() {
+    return findNotNullChildByType(VALUE_NAME);
   }
 
 }

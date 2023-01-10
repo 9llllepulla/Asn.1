@@ -11,7 +11,7 @@ public interface AsnBodyChoiceExpr extends PsiElement {
   AsnBodyWithSyntaxExpr getBodyWithSyntaxExpr();
 
   @NotNull
-  List<AsnChoiceConstruct> getChoiceConstructList();
+  List<AsnElementsConst> getElementsConstList();
 
   @Nullable
   AsnTypes_ getTypes_();

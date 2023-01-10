@@ -11,14 +11,14 @@ import static com.gllllepulla.plugin.psi.AsnTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.gllllepulla.plugin.psi.*;
 
-public class AsnFrom_Impl extends ASTWrapperPsiElement implements AsnFrom_ {
+public class AsnConstruct_Impl extends ASTWrapperPsiElement implements AsnConstruct_ {
 
-  public AsnFrom_Impl(@NotNull ASTNode node) {
+  public AsnConstruct_Impl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull AsnVisitor visitor) {
-    visitor.visitFrom_(this);
+    visitor.visitConstruct_(this);
   }
 
   @Override
@@ -28,21 +28,27 @@ public class AsnFrom_Impl extends ASTWrapperPsiElement implements AsnFrom_ {
   }
 
   @Override
-  @NotNull
-  public List<AsnValues_> getValues_List() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnValues_.class);
+  @Nullable
+  public AsnElementsConst getElementsConst() {
+    return findChildByClass(AsnElementsConst.class);
   }
 
   @Override
-  @NotNull
-  public PsiElement getFrom() {
-    return findNotNullChildByType(FROM);
+  @Nullable
+  public AsnIdTaggedConst getIdTaggedConst() {
+    return findChildByClass(AsnIdTaggedConst.class);
   }
 
   @Override
-  @NotNull
-  public PsiElement getUserType() {
-    return findNotNullChildByType(USER_TYPE);
+  @Nullable
+  public AsnInnerExpr getInnerExpr() {
+    return findChildByClass(AsnInnerExpr.class);
+  }
+
+  @Override
+  @Nullable
+  public AsnSeqOfValue getSeqOfValue() {
+    return findChildByClass(AsnSeqOfValue.class);
   }
 
 }

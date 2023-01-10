@@ -11,6 +11,9 @@ public interface AsnBodyWithSyntaxExpr extends PsiElement {
   List<AsnTypes_> getTypes_List();
 
   @NotNull
+  List<AsnValues_> getValues_List();
+
+  @NotNull
   PsiElement getLbrace();
 
   @Nullable
