@@ -27,6 +27,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.intellij.formatting.Indent.Type.*;
+
 /**
  *  Блок форматирования - это некоторый диапазон текста (часто соответствующий какому-то PSI-элементу), к которому применяются правила форматирования.
  *  Блоки форматирования вкладываются друг в друга и образуют дерево.
@@ -54,11 +56,13 @@ public class AsnBlock extends AbstractBlock {
         return spacingBuilder.getSpacing(this, child1, child2);
     }
 
+    // определяет правила отступа относительно родительского блока
     @Override
     public Indent getIndent() {
-        return Indent.getNoneIndent();
+        return Indent.getIndent(SPACES, 1, true, true);
     }
 
+    // Возвращает true, если указанный блок не может содержать дочерние блоки.
     @Override
     public boolean isLeaf() {
         return super.myNode.getFirstChildNode() == null;

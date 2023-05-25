@@ -22,8 +22,6 @@ import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 
 import static com.gllllepulla.plugin.AsnFileType.ASN_TOKEN_INSTANCE;
-import static com.gllllepulla.plugin.psi.AsnTypes.LBRACE;
-import static com.gllllepulla.plugin.psi.AsnTypes.RBRACE;
 
 public class AsnFormattingModelBuilder implements FormattingModelBuilder {
 
@@ -39,31 +37,23 @@ public class AsnFormattingModelBuilder implements FormattingModelBuilder {
 
     private SpacingBuilder createSpaceBuilder() {
         return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                //.append(comment())
-                //.append(numberingRule())
-                //.append(valuesRule())
-                //.append(typeStringRule())
-                .append(expressionRule());
-    }
-
-    private SpacingBuilder expressionRule() {
-        /*return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .betweenInside(AsnTypes.LBRACE, AsnTypes.RBRACE, AsnTypes.EXPR_).none();*/
-        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .betweenInside(AsnTypes.LBRACE, AsnTypes.RBRACE, AsnTypes.BODY_ENUM).spaces(5);
+                .append(comment())
+                .append(atRule())
+                .append(numberingRule())
+                .append(valuesRule())
+                .append(headerRule())
+                .append(typeStringRule());
     }
 
     private SpacingBuilder valuesRule() {
         return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .before(AsnTypes.VALUE_NAME).spaces(1)
-                .after(AsnTypes.VALUE_NAME).spaces(1)
-                .before(AsnTypes.USER_TYPE).spaces(1)
-                .after(AsnTypes.USER_TYPE).spaces(1);
+                .before(AsnTypes.TYPES_).spaces(1)
+                .after(AsnTypes.TYPES_).spaceIf(false);
     }
 
     private SpacingBuilder typeStringRule() {
         return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
-                .around(AsnTypes.TYPES_).spaces(1);
+                .around(AsnTypes.TYPE_STRING_SIZE).spaces(1);
     }
 
     private SpacingBuilder numberingRule() {
@@ -71,6 +61,17 @@ public class AsnFormattingModelBuilder implements FormattingModelBuilder {
                 .before(AsnTypes.RANGE_).spaces(1)
                 .around(AsnTypes.INT_SQUARE).spaces(1)
                 .around(AsnTypes.SIZE_RANGE).spaces(1);
+    }
+
+    private SpacingBuilder atRule() {
+        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
+                .before(AsnTypes.AT).spaces(1)
+                .after(AsnTypes.AT).none();
+    }
+
+    private SpacingBuilder headerRule() {
+        return new SpacingBuilder(codeStyleSettings, AsnLanguage.INSTANCE)
+                .around(AsnTypes.FILE_HEADER).spaceIf(false);
     }
 
     private SpacingBuilder comment() {
