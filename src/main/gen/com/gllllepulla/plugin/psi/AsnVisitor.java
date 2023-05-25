@@ -7,15 +7,11 @@ import com.intellij.psi.PsiElement;
 
 public class AsnVisitor extends PsiElementVisitor {
 
-  public void visitBodyChoice(@NotNull AsnBodyChoice o) {
+  public void visitAllValues_(@NotNull AsnAllValues_ o) {
     visitPsiElement(o);
   }
 
   public void visitBodyChoiceExpr(@NotNull AsnBodyChoiceExpr o) {
-    visitPsiElement(o);
-  }
-
-  public void visitBodyEnum(@NotNull AsnBodyEnum o) {
     visitPsiElement(o);
   }
 
@@ -43,7 +39,7 @@ public class AsnVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitChoiceConstruct(@NotNull AsnChoiceConstruct o) {
+  public void visitConstruct_(@NotNull AsnConstruct_ o) {
     visitPsiElement(o);
   }
 
@@ -52,6 +48,10 @@ public class AsnVisitor extends PsiElementVisitor {
   }
 
   public void visitElement_(@NotNull AsnElement_ o) {
+    visitPsiElement(o);
+  }
+
+  public void visitElementsConst(@NotNull AsnElementsConst o) {
     visitPsiElement(o);
   }
 
@@ -71,11 +71,7 @@ public class AsnVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitFrom_(@NotNull AsnFrom_ o) {
-    visitPsiElement(o);
-  }
-
-  public void visitIdTaggedConstruct(@NotNull AsnIdTaggedConstruct o) {
+  public void visitIdTaggedConst(@NotNull AsnIdTaggedConst o) {
     visitPsiElement(o);
   }
 
@@ -132,10 +128,6 @@ public class AsnVisitor extends PsiElementVisitor {
   }
 
   public void visitSeqOfValue(@NotNull AsnSeqOfValue o) {
-    visitPsiElement(o);
-  }
-
-  public void visitSequenceConstruct(@NotNull AsnSequenceConstruct o) {
     visitPsiElement(o);
   }
 

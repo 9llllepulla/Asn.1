@@ -23,6 +23,7 @@ import com.intellij.psi.tree.TokenSet;
 import java.util.List;
 
 import static com.gllllepulla.plugin.psi.AsnTypes.*;
+import static com.gllllepulla.plugin.psi.token.groups.GroupingType.PRIMITIVE;
 
 /**
  * Primitive types of ASN lang: NUMBER_FLOAT, NUMBER_INT, STR_LITERALS, FALSE, TRUE
@@ -30,8 +31,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.*;
 class Primitive implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("Primitive");
+    public List<GroupingType> groupingTypes() {
+        return List.of(PRIMITIVE);
     }
 
     @Override

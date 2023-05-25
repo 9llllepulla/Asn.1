@@ -11,14 +11,14 @@ import static com.gllllepulla.plugin.psi.AsnTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.gllllepulla.plugin.psi.*;
 
-public class AsnIdTaggedConstructImpl extends ASTWrapperPsiElement implements AsnIdTaggedConstruct {
+public class AsnIdTaggedConstImpl extends ASTWrapperPsiElement implements AsnIdTaggedConst {
 
-  public AsnIdTaggedConstructImpl(@NotNull ASTNode node) {
+  public AsnIdTaggedConstImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull AsnVisitor visitor) {
-    visitor.visitIdTaggedConstruct(this);
+    visitor.visitIdTaggedConst(this);
   }
 
   @Override

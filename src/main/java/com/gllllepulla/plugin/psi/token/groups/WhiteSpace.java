@@ -28,8 +28,8 @@ import java.util.List;
 class WhiteSpace implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("whitespace");
+    public List<GroupingType> groupingTypes() {
+        return List.of(GroupingType.WHITESPACE);
     }
 
     @Override

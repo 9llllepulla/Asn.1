@@ -7,13 +7,22 @@ import com.intellij.psi.PsiElement;
 
 public interface AsnData_ extends PsiElement {
 
-  @Nullable
-  AsnBodyChoice getBodyChoice();
+  @NotNull
+  List<AsnElementsConst> getElementsConstList();
 
   @Nullable
   AsnSeqOf getSeqOf();
 
-  @NotNull
+  @Nullable
+  PsiElement getChoice();
+
+  @Nullable
+  PsiElement getLbrace();
+
+  @Nullable
+  PsiElement getRbrace();
+
+  @Nullable
   PsiElement getTypeClass();
 
   @Nullable

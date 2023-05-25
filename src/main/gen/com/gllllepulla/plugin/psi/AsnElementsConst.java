@@ -5,13 +5,13 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface AsnChoiceConstruct extends PsiElement {
-
-  @Nullable
-  AsnBodyEnum getBodyEnum();
+public interface AsnElementsConst extends PsiElement {
 
   @Nullable
   AsnElement_ getElement_();
+
+  @NotNull
+  List<AsnEnumElement> getEnumElementList();
 
   @Nullable
   AsnIntSquare getIntSquare();
@@ -20,10 +20,22 @@ public interface AsnChoiceConstruct extends PsiElement {
   AsnSeqOf getSeqOf();
 
   @Nullable
+  PsiElement getEnumerated();
+
+  @Nullable
   PsiElement getExplicit();
 
   @Nullable
   PsiElement getImplicit();
+
+  @Nullable
+  PsiElement getLbrace();
+
+  @Nullable
+  PsiElement getOptional();
+
+  @Nullable
+  PsiElement getRbrace();
 
   @NotNull
   PsiElement getValueName();

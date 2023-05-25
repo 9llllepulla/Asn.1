@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface AsnInnerChoiceExpr extends PsiElement {
 
   @NotNull
-  List<AsnChoiceConstruct> getChoiceConstructList();
+  List<AsnElementsConst> getElementsConstList();
 
   @Nullable
   AsnIntSquare getIntSquare();

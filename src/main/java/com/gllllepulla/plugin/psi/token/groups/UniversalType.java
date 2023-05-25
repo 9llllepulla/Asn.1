@@ -23,6 +23,7 @@ import java.util.List;
 
 import static com.gllllepulla.plugin.psi.AsnTypes.*;
 import static com.gllllepulla.plugin.psi.AsnTypes.UNIQUE;
+import static com.gllllepulla.plugin.psi.token.groups.GroupingType.UNIVERSAL_TYPE;
 
 /**
  * Universal types of ASN lang: BOOLEAN, DEFAULT, INTEGER, NULL, OID, OPTIONAL, REAL, UNIQUE
@@ -30,8 +31,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.UNIQUE;
 class UniversalType implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("uni type");
+    public List<GroupingType> groupingTypes() {
+        return List.of(UNIVERSAL_TYPE);
     }
 
     @Override

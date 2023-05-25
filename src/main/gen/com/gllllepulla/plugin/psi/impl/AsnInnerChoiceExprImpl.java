@@ -29,8 +29,8 @@ public class AsnInnerChoiceExprImpl extends ASTWrapperPsiElement implements AsnI
 
   @Override
   @NotNull
-  public List<AsnChoiceConstruct> getChoiceConstructList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnChoiceConstruct.class);
+  public List<AsnElementsConst> getElementsConstList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnElementsConst.class);
   }
 
   @Override

@@ -29,8 +29,8 @@ public class AsnExports_Impl extends ASTWrapperPsiElement implements AsnExports_
 
   @Override
   @Nullable
-  public AsnTypes_ getTypes_() {
-    return findChildByClass(AsnTypes_.class);
+  public AsnAllValues_ getAllValues_() {
+    return findChildByClass(AsnAllValues_.class);
   }
 
   @Override
@@ -43,6 +43,12 @@ public class AsnExports_Impl extends ASTWrapperPsiElement implements AsnExports_
   @NotNull
   public PsiElement getExports() {
     return findNotNullChildByType(EXPORTS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getOid() {
+    return findChildByType(OID);
   }
 
   @Override

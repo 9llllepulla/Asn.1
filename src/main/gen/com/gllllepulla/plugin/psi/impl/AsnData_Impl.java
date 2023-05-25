@@ -28,9 +28,9 @@ public class AsnData_Impl extends ASTWrapperPsiElement implements AsnData_ {
   }
 
   @Override
-  @Nullable
-  public AsnBodyChoice getBodyChoice() {
-    return findChildByClass(AsnBodyChoice.class);
+  @NotNull
+  public List<AsnElementsConst> getElementsConstList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnElementsConst.class);
   }
 
   @Override
@@ -40,9 +40,27 @@ public class AsnData_Impl extends ASTWrapperPsiElement implements AsnData_ {
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public PsiElement getChoice() {
+    return findChildByType(CHOICE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLbrace() {
+    return findChildByType(LBRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrace() {
+    return findChildByType(RBRACE);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getTypeClass() {
-    return findNotNullChildByType(TYPE_CLASS);
+    return findChildByType(TYPE_CLASS);
   }
 
   @Override

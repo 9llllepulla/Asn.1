@@ -30,8 +30,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.UNIVERSAL;
 class GeneralKeyword implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("general keyword");
+    public List<GroupingType> groupingTypes() {
+        return List.of(GroupingType.GENERAL_KEYWORD);
     }
 
     @Override

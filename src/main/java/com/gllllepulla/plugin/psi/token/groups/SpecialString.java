@@ -23,6 +23,7 @@ import java.util.List;
 
 import static com.gllllepulla.plugin.psi.AsnTypes.*;
 import static com.gllllepulla.plugin.psi.AsnTypes.STRING_VTEXT;
+import static com.gllllepulla.plugin.psi.token.groups.GroupingType.SPECIAL_STRING;
 
 /**
  * Special types of strings of ASN lang:
@@ -43,8 +44,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.STRING_VTEXT;
 class SpecialString implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("Special strings");
+    public List<GroupingType> groupingTypes() {
+        return List.of(SPECIAL_STRING);
     }
 
     @Override

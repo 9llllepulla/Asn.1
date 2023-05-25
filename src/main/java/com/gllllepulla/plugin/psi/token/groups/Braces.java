@@ -30,8 +30,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.RBRACE;
 class Braces implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("braces");
+    public List<GroupingType> groupingTypes() {
+        return List.of(GroupingType.BRACES);
     }
 
     @Override

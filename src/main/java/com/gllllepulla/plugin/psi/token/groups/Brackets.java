@@ -30,8 +30,8 @@ import static com.gllllepulla.plugin.psi.AsnTypes.RBRACKET;
 class Brackets implements GroupableToken {
 
     @Override
-    public List<String> groupingTypes() {
-        return List.of("brackets");
+    public List<GroupingType> groupingTypes() {
+        return List.of(GroupingType.BRACKETS);
     }
 
     @Override

@@ -29,8 +29,8 @@ public class AsnImports_Impl extends ASTWrapperPsiElement implements AsnImports_
 
   @Override
   @NotNull
-  public List<AsnFrom_> getFrom_List() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnFrom_.class);
+  public List<AsnAllValues_> getAllValues_List() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, AsnAllValues_.class);
   }
 
   @Override

@@ -9,24 +9,23 @@ import com.gllllepulla.plugin.psi.impl.*;
 
 public interface AsnTypes {
 
-  IElementType BODY_CHOICE = new AsnElementType("BODY_CHOICE");
+  IElementType ALL_VALUES_ = new AsnElementType("ALL_VALUES_");
   IElementType BODY_CHOICE_EXPR = new AsnElementType("BODY_CHOICE_EXPR");
-  IElementType BODY_ENUM = new AsnElementType("BODY_ENUM");
   IElementType BODY_ENUM_EXPR = new AsnElementType("BODY_ENUM_EXPR");
   IElementType BODY_SEQUENCE_EXPR = new AsnElementType("BODY_SEQUENCE_EXPR");
   IElementType BODY_SINGLETON = new AsnElementType("BODY_SINGLETON");
   IElementType BODY_TAGGED_EXPR = new AsnElementType("BODY_TAGGED_EXPR");
   IElementType BODY_WITH_SYNTAX_EXPR = new AsnElementType("BODY_WITH_SYNTAX_EXPR");
   IElementType BOOL_ = new AsnElementType("BOOL_");
-  IElementType CHOICE_CONSTRUCT = new AsnElementType("CHOICE_CONSTRUCT");
+  IElementType CONSTRUCT_ = new AsnElementType("CONSTRUCT_");
   IElementType DATA_ = new AsnElementType("DATA_");
+  IElementType ELEMENTS_CONST = new AsnElementType("ELEMENTS_CONST");
   IElementType ELEMENT_ = new AsnElementType("ELEMENT_");
   IElementType ENUM_ELEMENT = new AsnElementType("ENUM_ELEMENT");
   IElementType EXPORTS_ = new AsnElementType("EXPORTS_");
   IElementType EXPR_ = new AsnElementType("EXPR_");
   IElementType FILE_HEADER = new AsnElementType("FILE_HEADER");
-  IElementType FROM_ = new AsnElementType("FROM_");
-  IElementType ID_TAGGED_CONSTRUCT = new AsnElementType("ID_TAGGED_CONSTRUCT");
+  IElementType ID_TAGGED_CONST = new AsnElementType("ID_TAGGED_CONST");
   IElementType IMPORTS_ = new AsnElementType("IMPORTS_");
   IElementType INNER_CHOICE_EXPR = new AsnElementType("INNER_CHOICE_EXPR");
   IElementType INNER_ENUM_EXPR = new AsnElementType("INNER_ENUM_EXPR");
@@ -39,7 +38,6 @@ public interface AsnTypes {
   IElementType PRIMITIVE_EXPR = new AsnElementType("PRIMITIVE_EXPR");
   IElementType PROPERTY = new AsnElementType("PROPERTY");
   IElementType RANGE_ = new AsnElementType("RANGE_");
-  IElementType SEQUENCE_CONSTRUCT = new AsnElementType("SEQUENCE_CONSTRUCT");
   IElementType SEQ_OF = new AsnElementType("SEQ_OF");
   IElementType SEQ_OF_VALUE = new AsnElementType("SEQ_OF_VALUE");
   IElementType SIZE_RANGE = new AsnElementType("SIZE_RANGE");
@@ -143,14 +141,11 @@ public interface AsnTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == BODY_CHOICE) {
-        return new AsnBodyChoiceImpl(node);
+      if (type == ALL_VALUES_) {
+        return new AsnAllValues_Impl(node);
       }
       else if (type == BODY_CHOICE_EXPR) {
         return new AsnBodyChoiceExprImpl(node);
-      }
-      else if (type == BODY_ENUM) {
-        return new AsnBodyEnumImpl(node);
       }
       else if (type == BODY_ENUM_EXPR) {
         return new AsnBodyEnumExprImpl(node);
@@ -170,11 +165,14 @@ public interface AsnTypes {
       else if (type == BOOL_) {
         return new AsnBool_Impl(node);
       }
-      else if (type == CHOICE_CONSTRUCT) {
-        return new AsnChoiceConstructImpl(node);
+      else if (type == CONSTRUCT_) {
+        return new AsnConstruct_Impl(node);
       }
       else if (type == DATA_) {
         return new AsnData_Impl(node);
+      }
+      else if (type == ELEMENTS_CONST) {
+        return new AsnElementsConstImpl(node);
       }
       else if (type == ELEMENT_) {
         return new AsnElement_Impl(node);
@@ -191,11 +189,8 @@ public interface AsnTypes {
       else if (type == FILE_HEADER) {
         return new AsnFileHeaderImpl(node);
       }
-      else if (type == FROM_) {
-        return new AsnFrom_Impl(node);
-      }
-      else if (type == ID_TAGGED_CONSTRUCT) {
-        return new AsnIdTaggedConstructImpl(node);
+      else if (type == ID_TAGGED_CONST) {
+        return new AsnIdTaggedConstImpl(node);
       }
       else if (type == IMPORTS_) {
         return new AsnImports_Impl(node);
@@ -232,9 +227,6 @@ public interface AsnTypes {
       }
       else if (type == RANGE_) {
         return new AsnRange_Impl(node);
-      }
-      else if (type == SEQUENCE_CONSTRUCT) {
-        return new AsnSequenceConstructImpl(node);
       }
       else if (type == SEQ_OF) {
         return new AsnSeqOfImpl(node);
