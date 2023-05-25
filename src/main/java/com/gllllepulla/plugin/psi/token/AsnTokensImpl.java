@@ -84,36 +84,3 @@ final class AsnTokensImpl implements AsnToken {
     }
 
 }
-    /*
-  // выражения
-  IElementType BODY_CHOICE_EXPR = new AsnElementType("BODY_CHOICE_EXPR");
-        IElementType BODY_CHOICE = new AsnElementType("BODY_CHOICE");
-
-  IElementType BODY_ENUM_EXPR = new AsnElementType("BODY_ENUM_EXPR");
-        IElementType BODY_ENUM = new AsnElementType("BODY_ENUM");
-
-  IElementType BODY_SEQUENCE_EXPR = new AsnElementType("BODY_SEQUENCE_EXPR");
-  IElementType BODY_TAGGED_EXPR = new AsnElementType("BODY_TAGGED_EXPR");
-
-  IElementType INNER_EXPR = new AsnElementType("INNER_CONSTRUCT");
-        IElementType INNER_CHOICE_EXPR = new AsnElementType("INNER_CONSTRUCT_CHOICE_EXPR");
-        IElementType INNER_ENUM_EXPR = new AsnElementType("INNER_CONSTRUCT_ENUM_EXPR");
-
-  IElementType PRIMITIVE_EXPR = new AsnElementType("PRIMITIVE_EXPR");
-  IElementType WITHOUT_BODY_EXPR = new AsnElementType("WITHOUT_BODY_EXPR");
-  IElementType BODY_WITH_SYNTAX_EXPR = new AsnElementType("WITH_SYNTAX_EXPR");
-  IElementType BODY_SINGLETON = new AsnElementType("SINGLETON_BODY");
-  IElementType ID_TAGGED_CONSTRUCT = new AsnElementType("ID_TAGGED");
-  IElementType ENUM_ELEMENT = new AsnElementType("ENUM_ELEMENT");
-
-  IElementType IMPORTS_ = new AsnElementType("IMPORTS_");
-  IElementType FROM_ = new AsnElementType("FROM_");
-  IElementType FILE_HEADER = new AsnElementType("FILE_HEADER");
-  IElementType EXPORTS_ = new AsnElementType("EXPORTS_");
-
-  // значения в скобках
-  IElementType INT_SQUARE = new AsnElementType("INT_SQUARE");
-  IElementType RANGE_ = new AsnElementType("RANGE_");
-  IElementType SIZE_RANGE = new AsnElementType("SIZE_RANGE");
-  IElementType INT_RANGE_EXPR
-  */
